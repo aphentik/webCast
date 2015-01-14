@@ -19,70 +19,66 @@
             <div id="stick2"></div>
         </div>
     </body>
-
     <script type="text/javascript">
-        console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
 
-       var socket = io.connect('http://localhost:3000');
+      //Define refresh interval (in seconds)
+      var interval = 1/5;
 
-        //LEFT Stick
-          var joystickl = new VirtualJoystick({
-              container : document.getElementById('stick1'),
-              strokeStyle : 'cyan',
-              mouseSupport  : true,
-              limitStickTravel: true,
-//              stationaryBase:true,
-//              baseX   : 200,
-//              baseY   : 200,
-              stickRadius : 100
-          });
-          joystickl.addEventListener('touchStart', function() {
-            console.log('down1');
-          });
-          joystickl.addEventListener('touchEnd', function() {
-            console.log('up1');
-          });
+      var previousX=0;
+      var previousY=0;
 
-        // RIGHT Stick
-          var joystickr = new VirtualJoystick({
-            container : document.getElementById('stick2'),
-            strokeStyle : 'orange',
-            mouseSupport  : true,
-            limitStickTravel: true,
-            stickRadius : 100
-          });
+      console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
+      var socket = io.connect('http://localhost:3000');
 
-          joystickr.addEventListener('touchStart', function() {
-            console.log('down2');
-          });
-          joystickr.addEventListener('touchEnd', function() {
-            console.log('up2');
-          });
+      //LEFT Stick
+      var joystickL = new VirtualJoystick({
+        container : document.getElementById('stick1'),
+        strokeStyle : 'cyan',
+        mouseSupport  : true,
+        limitStickTravel: true,
+//      stationaryBase:true,
+//      baseX   : 200,
+//      baseY   : 200,
+        stickRadius : 100
+      });
+          
+      // RIGHT Stick
+      var joystickR = new VirtualJoystick({
+        container : document.getElementById('stick2'),
+        strokeStyle : 'orange',
+        mouseSupport  : true,
+        limitStickTravel: true,
+        stickRadius : 100
+      });
 
-        // INTERVAL EVENT
-        setInterval(function(){
-            var outputEl  = document.getElementById('resultl');
-            outputEl.innerHTML  = '<b>Left stick Result:</b> '
-            + ' dx:'+joystickl.deltaX()
-            + ' dy:'+joystickl.deltaY()
-            + (joystickl.right()  ? ' right'  : '')
-            + (joystickl.up() ? ' up'   : '')
-            + (joystickl.left() ? ' left' : '')
-            + (joystickl.down() ? ' down'   : '')
+      // INTERVAL EVENT
+      setInterval(function(){
+        // var outputEl  = document.getElementById('resultl');
+        // outputEl.innerHTML  = '<b>Left stick Result:</b> '
+        // + ' dx:'+joystickL.deltaX()
+        // + ' dy:'+joystickL.deltaY()
+        // + (joystickL.right()  ? ' right'  : '')
+        // + (joystickL.up() ? ' up'   : '')
+        // + (joystickL.left() ? ' left' : '')
+        // + (joystickL.down() ? ' down'   : '')
 
-            var outputEl  = document.getElementById('resultr');
-            outputEl.innerHTML  = '<b>Left stick Result:</b> '
-            + ' dx:'+joystickr.deltaX()
-            + ' dy:'+joystickr.deltaY()
-            + (joystickr.right()  ? ' right'  : '')
-            + (joystickr.up() ? ' up'   : '')
-            + (joystickr.left() ? ' left' : '')
-            + (joystickr.down() ? ' down'   : '')
+        // var outputEl  = document.getElementById('resultr');
+        // outputEl.innerHTML  = '<b>Left stick Result:</b> '
+        // + ' dx:'+joystickR.deltaX()
+        // + ' dy:'+joystickR.deltaY()
+        // + (joystickR.right()  ? ' right'  : '')
+        // + (joystickR.up() ? ' up'   : '')
+        // + (joystickR.left() ? ' left' : '')
+        // + (joystickR.down() ? ' down'   : '')
 
-            if ((joystickl.deltaX() != 0) || (joystickl.deltaY() !=0)){
-              
-            }
-            socket.emit('coordinate',{DXL: joystickl.deltaX(),DYL: joystickl.deltaY(), DXR: joystickr.deltaX(),DYR: joystickr.deltaY() });
-        }, 1/4 * 1000);
-        </script> 
+        // If value is the same as previously
+        if ((joystickL.deltaX() == previousX) && (joystickL.deltaY() == previousY)){
+
+        }else{
+          socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+          previousX=joystickL.deltaX(); 
+          previousY=joystickL.deltaY();
+        }
+      }, interval *1000);
+    </script> 
 </html>

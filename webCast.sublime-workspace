@@ -1,0 +1,327 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "app.js",
+			"settings":
+			{
+				"buffer_size": 3521,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "<html>\n    <head>\n        <script type=\"text/javascript\" src=\"javascripts/virtualJoystick.js\"></script>\n        <script src=\"javascripts/jquery-1.11.2.min.js\"></script>\n        <script src=\"javascripts/socket.io.js\"></script>\n        <meta charset=\"utf-8\">\n        <link rel=\"stylesheet\" href=\"style/style.css\">\n    </head>\n    <body>\n        <div id=\"info\">\n            WEBCAST\n            <br/>\n            <span id=\"resultl\"></span>\n            <span id=\"resultr\"></span>\n        </div>\n        <img id=\"videofeed\" src=\"http://192.168.10.1:8080/stream/video.mjpeg\" alt=\"image\">\n        <div id=\"sticksContainer\">\n            <div id=\"stick1\"></div>\n            <div id=\"stick2\"></div>\n        </div>\n    </body>\n\n    <script type=\"text/javascript\">\n      console.log(\"Touchscreen is\", VirtualJoystick.touchScreenAvailable() ? \"available\" : \"not available\");\n\n      var socket = io.connect('http://localhost:3000');\n\n      //LEFT Stick\n      var joystickl = new VirtualJoystick({\n        container : document.getElementById('stick1'),\n        strokeStyle : 'cyan',\n        mouseSupport  : true,\n        limitStickTravel: true,\n//      stationaryBase:true,\n//      baseX   : 200,\n//      baseY   : 200,\n        stickRadius : 100\n      });\n\n      joystickl.addEventListener('touchStart', function() {\n        console.log('down1');\n      });\n      joystickl.addEventListener('touchEnd', function() {\n        console.log('up1');\n      });\n\n        // RIGHT Stick\n          var joystickr = new VirtualJoystick({\n            container : document.getElementById('stick2'),\n            strokeStyle : 'orange',\n            mouseSupport  : true,\n            limitStickTravel: true,\n            stickRadius : 100\n          });\n\n          joystickr.addEventListener('touchStart', function() {\n            console.log('down2');\n          });\n          joystickr.addEventListener('touchEnd', function() {\n            console.log('up2');\n          });\n\n        // INTERVAL EVENT\n        setInterval(function(){\n            var outputEl  = document.getElementById('resultl');\n            outputEl.innerHTML  = '<b>Left stick Result:</b> '\n            + ' dx:'+joystickl.deltaX()\n            + ' dy:'+joystickl.deltaY()\n            + (joystickl.right()  ? ' right'  : '')\n            + (joystickl.up() ? ' up'   : '')\n            + (joystickl.left() ? ' left' : '')\n            + (joystickl.down() ? ' down'   : '')\n\n            var outputEl  = document.getElementById('resultr');\n            outputEl.innerHTML  = '<b>Left stick Result:</b> '\n            + ' dx:'+joystickr.deltaX()\n            + ' dy:'+joystickr.deltaY()\n            + (joystickr.right()  ? ' right'  : '')\n            + (joystickr.up() ? ' up'   : '')\n            + (joystickr.left() ? ' left' : '')\n            + (joystickr.down() ? ' down'   : '')\n\n            if ((joystickl.deltaX() != 0) || (joystickl.deltaY() !=0)){\n              \n            }\n\n\n            socket.emit('coordinate',{DXL: joystickl.deltaX(),DYL: joystickl.deltaY(), DXR: joystickr.deltaX(),DYR: joystickr.deltaY() });\n        }, 1/4 * 1000);\n        </script> \n</html>\n",
+			"file": "index.html",
+			"file_size": 3187,
+			"file_write_time": 1421246247000000,
+			"settings":
+			{
+				"buffer_size": 3099,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "public/style/style.css",
+			"settings":
+			{
+				"buffer_size": 403,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "i2c.py",
+			"settings":
+			{
+				"buffer_size": 940,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "package.json",
+			"settings":
+			{
+				"buffer_size": 191,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Nodejs/Nodejs.sublime-build",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"install package",
+				"Package Control: Install Package"
+			],
+			[
+				"package contr",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 467.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"un client es",
+			"un client",
+			"proces",
+			"logo"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "app.js",
+					"settings":
+					{
+						"buffer_size": 3521,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2631,
+								2631
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 397.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "index.html",
+					"settings":
+					{
+						"buffer_size": 3099,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1433,
+								1433
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 193.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "public/style/style.css",
+					"settings":
+					{
+						"buffer_size": 403,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								403,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "i2c.py",
+					"settings":
+					{
+						"buffer_size": 940,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								272,
+								723
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 160.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "package.json",
+					"settings":
+					{
+						"buffer_size": 191,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								184,
+								184
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 170.0,
+	"status_bar_visible": true
+}
