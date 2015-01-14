@@ -9,6 +9,10 @@ var server = app.listen(port);
 var url = require('url');
 var querystring = require('querystring');
 var exec = require('child_process').exec;
+var python =true;
+// var i2c = require('i2c');
+// var address = 0x07;
+// var wire = new i2c(address, {device: '/dev/i2c-1'});
 
 // Set "Public" 
 app.use(express.static(__dirname + '/public'));  
@@ -43,7 +47,43 @@ io.sockets.on('connection', function (socket) {
         var DYR = data.DYR * -1;
         console.log('LEFT Coordinate: X = ' + DXL + '; Y = '+DYL);
         console.log('RIGHT Coordinate: X = ' + DXR + '; Y = '+DYR);
-        //exec('python i2c.py ',+ DXL +' '+ DYL);      // Execute Python Script with X&Y paramsx    
+
+        if(python == true){
+            exec('python i2c.py ',+ DXL +' '+ DYL);      // Execute Python Script with X&Y paramsx 
+        }else{
+            var motorRForward,
+                motorRBackward,
+                motorLForward,
+                motorLBackward,
+                breakmotor;
+            var V=(100-abs(DXL))*(DYL/100)+DYL;
+            var W=(100-abs(DYL))*(DXL/100)+DXL;
+            var R=int((V+W)/2);
+            var L=int((V-W)/2);
+
+            if(R>0){
+                motorRForward = R *2+50;
+                motorRBackward = 0;
+            }else if(R<0){
+                motorRBackward = -(R *2)-50;
+                motorRForward = 0;
+            }else{
+                motorRForward = 0;
+                motorRBackward = 0;
+            }  
+            if(L>0){
+                motorLForward = L *2 +50;
+                motorLBackward = 0;
+            }else if(L<0) {
+                motorLBackward = -L*2-50;
+                motorLForward = 0;
+            }else{
+                motorLForward = 0;
+                motorLBackward = 0;
+            }
+            breakmotor = 0;
+            wire.writeBytes(0x0F, [motorRForward, motorRBackward,motorLForward,motorLBackward,breakmotor], function(err) {});   
+        }      
     });
 });
 
