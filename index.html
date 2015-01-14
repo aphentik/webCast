@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <script type="text/javascript" src="javascripts/virtualJoystick.js"></script>
+        <script src="javascripts/jquery-1.11.2.min.js"></script>
+        <script src="javascripts/socket.io.js"></script>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style/style.css">
+    </head>
+    <body>
+        <div id="info">
+            WEBCAST
+            <br/>
+            <span id="resultl"></span>
+            <span id="resultr"></span>
+        </div>
+        <img id="videofeed" src="http://192.168.10.1:8080/stream/video.mjpeg" alt="image">
+        <div id="sticksContainer">
+            <div id="stick1"></div>
+            <div id="stick2"></div>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
+
+       var socket = io.connect('http://localhost:3000');
+
+        //LEFT Stick
+          var joystickl = new VirtualJoystick({
+              container : document.getElementById('stick1'),
+              strokeStyle : 'cyan',
+              mouseSupport  : true,
+              limitStickTravel: true,
+//              stationaryBase:true,
+//              baseX   : 200,
+//              baseY   : 200,
+              stickRadius : 100
+          });
+          joystickl.addEventListener('touchStart', function() {
+            console.log('down1');
+          });
+          joystickl.addEventListener('touchEnd', function() {
+            console.log('up1');
+          });
+
+        // RIGHT Stick
+          var joystickr = new VirtualJoystick({
+            container : document.getElementById('stick2'),
+            strokeStyle : 'orange',
+            mouseSupport  : true,
+            limitStickTravel: true,
+            stickRadius : 100
+          });
+
+          joystickr.addEventListener('touchStart', function() {
+            console.log('down2');
+          });
+          joystickr.addEventListener('touchEnd', function() {
+            console.log('up2');
+          });
+
+        // INTERVAL EVENT
+        setInterval(function(){
+            var outputEl  = document.getElementById('resultl');
+            outputEl.innerHTML  = '<b>Left stick Result:</b> '
+            + ' dx:'+joystickl.deltaX()
+            + ' dy:'+joystickl.deltaY()
+            + (joystickl.right()  ? ' right'  : '')
+            + (joystickl.up() ? ' up'   : '')
+            + (joystickl.left() ? ' left' : '')
+            + (joystickl.down() ? ' down'   : '')
+
+            var outputEl  = document.getElementById('resultr');
+            outputEl.innerHTML  = '<b>Left stick Result:</b> '
+            + ' dx:'+joystickr.deltaX()
+            + ' dy:'+joystickr.deltaY()
+            + (joystickr.right()  ? ' right'  : '')
+            + (joystickr.up() ? ' up'   : '')
+            + (joystickr.left() ? ' left' : '')
+            + (joystickr.down() ? ' down'   : '')
+
+            if ((joystickl.deltaX() != 0) || (joystickl.deltaY() !=0)){
+              
+            }
+            socket.emit('coordinate',{DXL: joystickl.deltaX(),DYL: joystickl.deltaY(), DXR: joystickr.deltaX(),DYR: joystickr.deltaY() });
+        }, 1/4 * 1000);
+        </script> 
+</html>
