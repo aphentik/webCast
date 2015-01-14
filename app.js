@@ -11,7 +11,7 @@ var querystring = require('querystring');
 var exec = require('child_process').exec;
 var i2c = require('i2c');
 var address = 0x07;
-var wire = new i2c(address, {device: '/dev/i2c-1'});
+var TRex = new i2c(address, {device: '/dev/i2c-1',debug: false});
 var offset = 40;
 
 // Set "Public" as root folder for static content
@@ -79,7 +79,7 @@ io.sockets.on('connection', function (socket) {
             motorLBackward = 0;
         }
         breakmotor = 0;
-        wire.writeBytes(0x0F, [motorRForward, motorRBackward,motorLForward,motorLBackward,breakmotor], function(err) {});        
+        TRex.writeBytes(0x0F, [motorRForward, motorRBackward,motorLForward,motorLBackward,breakmotor], function(err) { console.log("error"); console.log(err); });        
     });
 });
 

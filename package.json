@@ -1,12 +1,13 @@
 {
   "name": "webCast",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
   },
   "dependencies": {
     "express": "~4.10.6",
-    "socket.io": "~1.2.1"
+    "socket.io": "~1.2.1",
+    "i2c": "~0.1.6"
   }
 }
