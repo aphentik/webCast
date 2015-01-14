@@ -9,9 +9,9 @@ var server = app.listen(port);
 var url = require('url');
 var querystring = require('querystring');
 var exec = require('child_process').exec;
-// var i2c = require('i2c');
-// var address = 0x07;
-// var wire = new i2c(address, {device: '/dev/i2c-1'});
+var i2c = require('i2c');
+var address = 0x07;
+var wire = new i2c(address, {device: '/dev/i2c-1'});
 var offset = 40;
 
 // Set "Public" as root folder for static content
@@ -36,16 +36,16 @@ app.get('/action', function(req, res) {
 
 // Lors de la connection d'un client 
 io.sockets.on('connection', function (socket) {
-    socket.emit('message', 'Vous êtes bien connecté !');
-    console.log("Nouveau client connecté"+ socket.handshake.address);
+    socket.emit('message', 'Welcome, you are connected !');
+    console.log('New connected client: '+ socket.handshake.address);
 
     // Quand le serveur reçoit un signal de type "Coordinate" du client    
     socket.on('coordinate', function(data){
         // Récupération des coordonnées 
         var DXL = data.DXL;
-        var DYL = data.DYL * -1;
+        var DYL = data.DYL;
         var DXR = data.DXR;
-        var DYR = data.DYR * -1;
+        var DYR = data.DYR ;
         console.log('LEFT Coordinate: X = ' + DXL + '; Y = '+DYL);
         console.log('RIGHT Coordinate: X = ' + DXR + '; Y = '+DYR);
 
@@ -79,7 +79,7 @@ io.sockets.on('connection', function (socket) {
             motorLBackward = 0;
         }
         breakmotor = 0;
-        //wire.writeBytes(0x0F, [motorRForward, motorRBackward,motorLForward,motorLBackward,breakmotor], function(err) {});        
+        wire.writeBytes(0x0F, [motorRForward, motorRBackward,motorLForward,motorLBackward,breakmotor], function(err) {});        
     });
 });
 
