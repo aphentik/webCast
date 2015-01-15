@@ -96,7 +96,7 @@ io.sockets.on('connection', function (socket) {
             console.log(res);   
         });
         
-    }, 30 *1000);
+    }, 10 *1000);
 
 
 // Will print stacktrace
