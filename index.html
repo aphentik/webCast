@@ -69,13 +69,13 @@
         // + (joystickR.down() ? ' down'   : '')
 
         // If value is the same as previously
-        if ((joystickL.deltaX() == previousX) && (joystickL.deltaY() == previousY)){
+        //if ((joystickL.deltaX() == previousX) && (joystickL.deltaY() == previousY)){
 
-        }else{
+        //}else{
           socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
           previousX=joystickL.deltaX(); 
           previousY=joystickL.deltaY();
-        }
+        //}
       }, interval *1000);
     </script> 
 </html>
