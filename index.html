@@ -2,6 +2,9 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="style/style.css">
+        <script type="text/javascript" src="javascripts/virtualjoystick.js"></script>
+        <script src="javascripts/jquery-1.11.2.min.js"></script>
+        <script src="javascripts/socket.io.js"></script>
     </head>
     <body>
         <div id="info">
@@ -16,13 +19,13 @@
     </body>
     <script type="text/javascript">
       //Define refresh interval (in seconds)
-      var interval = 1/5;
+      var interval = 1/10;
 
       var previousX=0;
       var previousY=0;
 
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
-      var socket = io.connect('http://localhost:3000');
+      var socket = io.connect('http://192.168.10.1:3000');
 
       //LEFT Stick
       var joystickL = new VirtualJoystick({
@@ -33,7 +36,7 @@
 //      stationaryBase:true,
 //      baseX   : 200,
 //      baseY   : 200,
-        stickRadius : 100
+        stickRadius : 200
       });
           
       // RIGHT Stick
@@ -42,7 +45,7 @@
         strokeStyle : 'orange',
         mouseSupport  : true,
         limitStickTravel: true,
-        stickRadius : 100
+        stickRadius : 200
       });
 
       // INTERVAL EVENT
@@ -75,7 +78,4 @@
         }
       }, interval *1000);
     </script> 
-    <script type="text/javascript" src="javascripts/virtualJoystick.js"></script>
-    <script src="javascripts/jquery-1.11.2.min.js"></script>
-    <script src="javascripts/socket.io.js"></script>
 </html>
