@@ -78,12 +78,26 @@ io.sockets.on('connection', function (socket) {
         }else{
             motorLForward = 0;
             motorLBackward = 0;
-        }
+        };
         breakmotor = 0;
         console.log('motorLForward='+ motorLForward +' motorLBackward='+motorLBackward+' motorRForward='+ motorRForward+' motorRBackward='+motorRBackward);
         TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });        
     });
 });
+
+    // Read Battery Level 
+    setInterval(function(){
+
+        wire.readBytes(0x0F, 3, function(err, res) {
+            // result contains a buffer of bytes
+            if(err){
+                console.log("i2c Read battery Error: "+ err);
+            };   
+            console.log(res);   
+        });
+        
+    }, 30 *1000);
+
 
 // Will print stacktrace
 if (app.get('env') === 'development') {
