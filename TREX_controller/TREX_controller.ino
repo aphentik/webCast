@@ -25,7 +25,7 @@
 
 // define global variables here
 byte mode=0;                                           // mode=0: I2C / mode=1: Radio Control / mode=2: TTL(Bluetooth) / mode=3: Shutdown
-int  lowbat=550;                                       // default low battery voltage is 5.5V
+int  lowbat=600;                                       // default low battery voltage is 5.5V
 byte errorflag;                                        // non zero if bad data packet received
 byte pwmfreq;                                          // value from 1-7
 byte i2cfreq;                                          // I2C clock frequency can be 100kHz(default) or 400kHz
@@ -210,8 +210,12 @@ void loop()
       lmcur=(analogRead(lmcurpin)-511)*48.83;          // read  left motor current sensor and convert reading to mA
       rmcur=(analogRead(rmcurpin)-511)*48.83;          // read right motor current sensor and convert reading to mA
       volts=analogRead(voltspin)*10/3.357;             // read battery level and convert to volts with 2 decimal places (eg. 1007 = 10.07 V)
-      if(volts<lowbat) {mode=3; Serial.println("No more battery");}        // change to shutdown mode if battery voltage too low
-      
+      if(volts<lowbat)
+      {
+      mode=3; 
+      Serial.println("No more battery");        // change to shutdown mode if battery voltage too low
+      MotorBeep(5);
+      }
     }
   }
 }
