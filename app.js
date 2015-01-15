@@ -13,6 +13,7 @@ var i2c = require('i2c');
 var address = 0x07;
 var TRex = new i2c(address, {device: '/dev/i2c-1',debug: false});
 var offset = 40;
+var coeff=1;
 
 // Set "Public" as root folder for static content
 app.use(express.static(__dirname + '/public'));  
@@ -46,8 +47,8 @@ io.sockets.on('connection', function (socket) {
         var DYL = data.DYL;
         var DXR = data.DXR;
         var DYR = data.DYR ;
-        console.log('LEFT Coordinate: X = ' + DXL + '; Y = '+DYL);
-        console.log('RIGHT Coordinate: X = ' + DXR + '; Y = '+DYR);
+        //console.log('LEFT Coordinate: X = ' + DXL + '; Y = '+DYL);
+        //console.log('RIGHT Coordinate: X = ' + DXR + '; Y = '+DYR);
 
         var motorRForward,
             motorRBackward,
@@ -59,27 +60,27 @@ io.sockets.on('connection', function (socket) {
         var R= parseInt((V+W)/2);
         var L=parseInt((V-W)/2);
         if(R>0){
-            motorRForward = R *2 +offset;
+            motorRForward = R *coeff +offset;
             motorRBackward = 0;
         }else if(R<0){
-            motorRBackward = -(R *2)- offset;
+            motorRBackward = -(R *coeff)- offset;
             motorRForward = 0;
         }else{
             motorRForward = 0;
             motorRBackward = 0;
         }  
         if(L>0){
-            motorLForward = L *2 + offset;
+            motorLForward = L *coeff + offset;
             motorLBackward = 0;
         }else if(L<0) {
-            motorLBackward = -L*2- offset;
+            motorLBackward = -L*coeff- offset;
             motorLForward = 0;
         }else{
             motorLForward = 0;
             motorLBackward = 0;
         }
         breakmotor = 0;
-        TRex.writeBytes(0x0F, [motorRForward, motorRBackward,motorLForward,motorLBackward,breakmotor], function(err) { console.log("error"); console.log(err); });        
+        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("error"+ err);} });        
     });
 });
 
@@ -105,4 +106,6 @@ app.use(function(err, req, res, next) {
 });
 
 console.log('Server Listening on port '+port);
+console.log('Control interface: http://192.168.10.1:3000');
+console.log('Camera interface: http://192.168.10.1:8080');
 console.log('ENJOY YOUR RIDE ;) ');
