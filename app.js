@@ -12,7 +12,7 @@ var exec = require('child_process').exec;
 var i2c = require('i2c');
 var address = 0x07;
 var TRex = new i2c(address, {device: '/dev/i2c-1',debug: false});
-var offset = 30;
+var offset = 0;
 var coeff=1;
 
 // Set "Public" as root folder for static content
