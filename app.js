@@ -80,6 +80,7 @@ io.sockets.on('connection', function (socket) {
             motorLBackward = 0;
         }
         breakmotor = 0;
+        console.log('motorLForward='+ motorLForward +' motorLBackward='+motorLBackward+' motorRForward='+ motorRForward+' motorRBackward='+motorRBackward);
         TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("error"+ err);} });        
     });
 });
