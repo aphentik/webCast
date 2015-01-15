@@ -12,7 +12,7 @@ var exec = require('child_process').exec;
 var i2c = require('i2c');
 var address = 0x07;
 var TRex = new i2c(address, {device: '/dev/i2c-1',debug: false});
-var offset = 40;
+var offset = 30;
 var coeff=1;
 
 // Set "Public" as root folder for static content
@@ -63,7 +63,7 @@ io.sockets.on('connection', function (socket) {
             motorRForward = R *coeff +offset;
             motorRBackward = 0;
         }else if(R<0){
-            motorRBackward = -(R *coeff)- offset;
+            motorRBackward = -(R *coeff)+ offset;
             motorRForward = 0;
         }else{
             motorRForward = 0;
@@ -73,7 +73,7 @@ io.sockets.on('connection', function (socket) {
             motorLForward = L *coeff + offset;
             motorLBackward = 0;
         }else if(L<0) {
-            motorLBackward = -L*coeff- offset;
+            motorLBackward = -L*coeff+ offset;
             motorLForward = 0;
         }else{
             motorLForward = 0;
@@ -81,7 +81,7 @@ io.sockets.on('connection', function (socket) {
         }
         breakmotor = 0;
         console.log('motorLForward='+ motorLForward +' motorLBackward='+motorLBackward+' motorRForward='+ motorRForward+' motorRBackward='+motorRBackward);
-        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("error"+ err);} });        
+        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });        
     });
 });
 
