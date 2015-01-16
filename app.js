@@ -4,14 +4,15 @@ var fs = require('fs');
 var index = fs.readFileSync(__dirname + '/index.html');
 var express = require('express');
 var app = express();
+// Server variables
 var port= 3000;
 var server = app.listen(port);
-var url = require('url');
-var querystring = require('querystring');
 var exec = require('child_process').exec;
+// i2C variables
 var i2c = require('i2c');
 var address = 0x07;
 var TRex = new i2c(address, {device: '/dev/i2c-1',debug: false});
+//Wild Thumper command variables
 var offset = 0;
 var coeff=1;
 
@@ -27,17 +28,8 @@ app.get('/', function(req, res) {
 	res.end(index);	
 });
 
-app.get('/action', function(req, res) {
-	var params = querystring.parse(url.parse(req.url).query);	//Get URL params	
-	exec('python i2c.py',+ params[' X'] + params[' Y']);		// Execute Python Script with X&Y params
-	console.log(params['X'] + params['Y']);						// Print Params
-	res.writeHead(200, {'Content-Type': 'text/html'});
-	res.end(index);	
-});
-
 // Lors de la connection d'un client 
 io.sockets.on('connection', function (socket) {
-    socket.emit('message', 'Welcome, you are connected !');
     console.log('New connected client: '+ socket.handshake.address);
 
     // Quand le serveur reçoit un signal de type "Coordinate" du client    
@@ -50,6 +42,7 @@ io.sockets.on('connection', function (socket) {
         //console.log('LEFT Coordinate: X = ' + DXL + '; Y = '+DYL);
         //console.log('RIGHT Coordinate: X = ' + DXR + '; Y = '+DYR);
 
+        // Wild Thumper control code
         var motorRForward,
             motorRBackward,
             motorLForward,
@@ -85,29 +78,17 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-    // Read Battery Level 
-    setInterval(function(){
-        TRex.readBytes(0x0F, 3, function(err, res) {
-            // result contains a buffer of bytes
-            if(err){
-                console.log("i2c Read battery Error: "+ err);
-            };   
-            console.log(res);   
-        });
-        
-    }, 10 *1000);
-
-
-// Will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+// Read Battery Level 
+setInterval(function(){
+    TRex.readBytes(0x0F, 3, function(err, res) {
+        // result contains a buffer of bytes
+        if(err){
+            console.log("i2c Read battery Error: "+ err);
+        };   
+        console.log(res);   
     });
-}
+    
+}, 10 *1000);
 
 // Production error handler
 // no stacktraces leaked to user
@@ -120,6 +101,8 @@ app.use(function(err, req, res, next) {
 });
 
 console.log('Server Listening on port '+port);
-console.log('Control interface: http://192.168.10.1:3000');
-console.log('Camera interface: http://192.168.10.1:8080');
+console.log('Cast Control Interface: http://192.168.10.1:3000');
+console.log('Camera Settings Interface: http://192.168.10.1:8080');
 console.log('ENJOY YOUR RIDE ;) ');
+    
+

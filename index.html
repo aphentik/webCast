@@ -7,10 +7,6 @@
         <script src="javascripts/socket.io.js"></script>
     </head>
     <body>
-        <div id="info">
-            WEBCAST
-            <br/>
-        </div>
         <img id="videofeed" src="http://192.168.10.1:8080/stream/video.mjpeg" alt="If you see this message check the availability of video stream">
         <div id="sticksContainer">
             <div id="stick1"></div>
@@ -21,8 +17,7 @@
       //Define refresh interval (in seconds)
       var interval = 1/10;
 
-      var previousX=0;
-      var previousY=0;
+      var previousIsZero = true;
 
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');
@@ -50,32 +45,15 @@
 
       // INTERVAL EVENT
       setInterval(function(){
-        // var outputEl  = document.getElementById('resultl');
-        // outputEl.innerHTML  = '<b>Left stick Result:</b> '
-        // + ' dx:'+joystickL.deltaX()
-        // + ' dy:'+joystickL.deltaY()
-        // + (joystickL.right()  ? ' right'  : '')
-        // + (joystickL.up() ? ' up'   : '')
-        // + (joystickL.left() ? ' left' : '')
-        // + (joystickL.down() ? ' down'   : '')
+        // If previous value is 0,0
+        if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero=true){
 
-        // var outputEl  = document.getElementById('resultr');
-        // outputEl.innerHTML  = '<b>Left stick Result:</b> '
-        // + ' dx:'+joystickR.deltaX()
-        // + ' dy:'+joystickR.deltaY()
-        // + (joystickR.right()  ? ' right'  : '')
-        // + (joystickR.up() ? ' up'   : '')
-        // + (joystickR.left() ? ' left' : '')
-        // + (joystickR.down() ? ' down'   : '')
-
-        // If value is the same as previously
-        //if ((joystickL.deltaX() == previousX) && (joystickL.deltaY() == previousY)){
-
-        //}else{
+        }else{
           socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
-          previousX=joystickL.deltaX(); 
-          previousY=joystickL.deltaY();
-        //}
+          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
+            previousIsZero=true;
+          }else previousIsZero=false; 
+        }
       }, interval *1000);
     </script> 
 </html>
