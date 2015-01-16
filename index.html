@@ -47,6 +47,7 @@
           window.ondevicemotion =function(event){
             var accelerationX = event.accelerationIncludingGravity.x;  
             var accelerationY = event.accelerationIncludingGravity.y; 
+            var accelerationY = e.accelerationIncludingGravity.y; 
             joystickR.deltaX()=0;
             joystickR.deltaY()=0; 
             socket.emit('coordinate',{DXL: accelerationX ,DYL: accelerationY,DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
