@@ -85,9 +85,8 @@ setInterval(function(){
         if(err){
             console.log("i2c Read battery Error: "+ err);
         };   
-        console.log(res);   
-    });
-    
+        console.log("Read battery result:"+res);   
+    }); 
 }, 10 *1000);
 
 // Production error handler
