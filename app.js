@@ -49,8 +49,6 @@ io.sockets.on('connection', function (socket) {
             motorLBackward,
             breakmotor;
 
-        console.log(DXL);
-        console.log(DYL);
         var V=(200-Math.abs(DXL))*(DYL/200)+DYL;
         var W=(200-Math.abs(DYL))*(DXL/200)+DXL;
         var R= parseInt((V+W)/2);
@@ -83,15 +81,15 @@ io.sockets.on('connection', function (socket) {
 });
 
 // Read Battery Level 
-setInterval(function(){
-    TRex.readBytes(0x0C, 2, function(err, res) {
-        // result contains a buffer of bytes
-        if(err){
-            console.log("i2c Read battery Error: "+ err);
-        };   
-        console.log(res);  //"Read battery result:"+ 
-    }); 
-}, 10 *1000);
+// setInterval(function(){
+//     TRex.readBytes(0x0C, 2, function(err, res) {
+//         // result contains a buffer of bytes
+//         if(err){
+//             console.log("i2c Read battery Error: "+ err);
+//         };   
+//         console.log(res);  //"Read battery result:"+ 
+//     }); 
+// }, 10 *1000);
 
 // Production error handler
 // no stacktraces leaked to user

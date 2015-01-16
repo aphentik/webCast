@@ -43,30 +43,21 @@
         limitStickTravel: true,
         stickRadius : 200
       });
-      // if (acc == 1){
-      //     window.addEventListener('devicemotion', function (e) {
+ 
+      // INTERVAL EVENT
+      setInterval(function(){
+        // If previous value is 0,0
+        if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
 
-      //       var accelerationX = e.accelerationIncludingGravity.x;  
-      //       var accelerationY = e.accelerationIncludingGravity.y; 
-      //       joystickR.deltaX()=0;
-      //       joystickR.deltaY()=0; 
-      //       socket.emit('coordinate',{DXL: accelerationX ,DYL: accelerationY,DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
-      //     }
-      // }else{
-        // INTERVAL EVENT
-        setInterval(function(){
-          // If previous value is 0,0
-          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
-
-          }else{
-            socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
-            if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
-              previousIsZero=true;
-            }else {
-              previousIsZero=false; 
-            }
+        }else{
+          socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
+            previousIsZero=true;
+          }else {
+            previousIsZero=false; 
           }
-        }, interval *1000);
-      //}
+        }
+      }, interval *1000);
+      
     </script> 
 </html>
