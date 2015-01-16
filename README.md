@@ -2,7 +2,8 @@ WebCast est un projet de chariot de travelling stabilisé téléguidé via une a
 
 Webcat is a project of stabilised trolley guided from a web application. It's develloped as part of an end-of-study project at ECE Paris. The trolley is composed of a Wild Thumper robot, a B+ revision Raspberry Pi and a T-Rex Control board. The web application is based on Node.js plateform, it provide a live video stream of the raspicam and robot control via virtual joysticks.
 
-Mots clés / Key words:
+===================
+###Mots clés / Key words:
 
 - Raspberry
 - T-Rex
