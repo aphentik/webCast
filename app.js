@@ -75,7 +75,12 @@ io.sockets.on('connection', function (socket) {
         breakmotor = 0;
         //console.log('motorLForward='+ motorLForward +' motorLBackward='+motorLBackward+' motorRForward='+ motorRForward+' motorRBackward='+motorRBackward);
         TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });        
-        TRex.readBytes(0x0F, 2, function(err, res) {
+    });
+});
+
+// Read Battery Level 
+setInterval(function(){
+    TRex.readBytes(0x0C, 2, function(err, res) {
         // result contains a buffer of bytes
         if(err){
             console.log("i2c Read battery Error: "+ err);
@@ -83,20 +88,6 @@ io.sockets.on('connection', function (socket) {
         console.log(res);  //"Read battery result:"+ 
     }); 
 }, 10 *1000);
-
-    });
-});
-
-// Read Battery Level 
-// setInterval(function(){
-//     TRex.readBytes(0x0F, 2, function(err, res) {
-//         // result contains a buffer of bytes
-//         if(err){
-//             console.log("i2c Read battery Error: "+ err);
-//         };   
-//         console.log(res);  //"Read battery result:"+ 
-//     }); 
-// }, 10 *1000);
 
 // Production error handler
 // no stacktraces leaked to user
