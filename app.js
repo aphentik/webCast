@@ -80,7 +80,7 @@ io.sockets.on('connection', function (socket) {
 
 // Read Battery Level 
 setInterval(function(){
-    TRex.readBytes(0x0F, 2, function(err, res) {
+    TRex.readBytes(0x0C, 2, function(err, res) {
         // result contains a buffer of bytes
         if(err){
             console.log("i2c Read battery Error: "+ err);
