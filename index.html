@@ -43,16 +43,16 @@
         limitStickTravel: true,
         stickRadius : 200
       });
-      if (acc == 1){
-          window.addEventListener('devicemotion', function (e) {
+      // if (acc == 1){
+      //     window.addEventListener('devicemotion', function (e) {
 
-            var accelerationX = e.accelerationIncludingGravity.x;  
-            var accelerationY = e.accelerationIncludingGravity.y; 
-            joystickR.deltaX()=0;
-            joystickR.deltaY()=0; 
-            socket.emit('coordinate',{DXL: accelerationX ,DYL: accelerationY,DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
-          }
-      }else{
+      //       var accelerationX = e.accelerationIncludingGravity.x;  
+      //       var accelerationY = e.accelerationIncludingGravity.y; 
+      //       joystickR.deltaX()=0;
+      //       joystickR.deltaY()=0; 
+      //       socket.emit('coordinate',{DXL: accelerationX ,DYL: accelerationY,DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
+      //     }
+      // }else{
         // INTERVAL EVENT
         setInterval(function(){
           // If previous value is 0,0
@@ -67,6 +67,6 @@
             }
           }
         }, interval *1000);
-      }
+      //}
     </script> 
 </html>
