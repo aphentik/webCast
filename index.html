@@ -16,6 +16,7 @@
     <script type="text/javascript">
       //Define refresh interval (in seconds)
       var interval = 1/10;
+      var acc=1;
 
       var previousIsZero = true;
 
@@ -42,20 +43,27 @@
         limitStickTravel: true,
         stickRadius : 200
       });
-
-      // INTERVAL EVENT
-      setInterval(function(){
-        // If previous value is 0,0
-        if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
-
-        }else{
-          socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
-          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
-            previousIsZero=true;
-          }else {
-            previousIsZero=false; 
+      if (acc == 1){
+          window.ondevicemotion =function(event){
+            var accelerationX = event.accelerationIncludingGravity.x;  
+            var accelerationY = event.accelerationIncludingGravity.y;  
+            socket.emit('coordinate',{DXL: accelerationX ,DYL: accelerationY });
           }
-        }
-      }, interval *1000);
+      }else{
+        // INTERVAL EVENT
+        setInterval(function(){
+          // If previous value is 0,0
+          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
+
+          }else{
+            socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+            if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
+              previousIsZero=true;
+            }else {
+              previousIsZero=false; 
+            }
+          }
+        }, interval *1000);
+      }
     </script> 
 </html>

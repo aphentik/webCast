@@ -48,6 +48,8 @@ io.sockets.on('connection', function (socket) {
             motorLForward,
             motorLBackward,
             breakmotor;
+
+
         var V=(200-Math.abs(DXL))*(DYL/200)+DYL;
         var W=(200-Math.abs(DYL))*(DXL/200)+DXL;
         var R= parseInt((V+W)/2);
