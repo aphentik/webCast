@@ -16,7 +16,7 @@
     <script type="text/javascript">
       //Define refresh interval (in seconds)
       var interval = 1/10;
-      var acc=1;
+      var acc=0;
 
       var previousIsZero = true;
 
@@ -43,7 +43,7 @@
         limitStickTravel: true,
         stickRadius : 200
       });
-      //if (acc == 1){
+      if (acc == 1){
           window.addEventListener('devicemotion', function (e) {
 
             var accelerationX = e.accelerationIncludingGravity.x;  
@@ -52,21 +52,21 @@
             joystickR.deltaY()=0; 
             socket.emit('coordinate',{DXL: accelerationX ,DYL: accelerationY,DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
           }
-      // }else{
-      //   // INTERVAL EVENT
-      //   setInterval(function(){
-      //     // If previous value is 0,0
-      //     if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
+      }else{
+        // INTERVAL EVENT
+        setInterval(function(){
+          // If previous value is 0,0
+          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
 
-      //     }else{
-      //       socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
-      //       if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
-      //         previousIsZero=true;
-      //       }else {
-      //         previousIsZero=false; 
-      //       }
-      //     }
-      //   }, interval *1000);
-      // }
+          }else{
+            socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+            if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
+              previousIsZero=true;
+            }else {
+              previousIsZero=false; 
+            }
+          }
+        }, interval *1000);
+      }
     </script> 
 </html>
