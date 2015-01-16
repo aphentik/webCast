@@ -44,9 +44,9 @@
         stickRadius : 200
       });
       //if (acc == 1){
-          window.ondevicemotion =function(event){
-            var accelerationX = event.accelerationIncludingGravity.x;  
-            var accelerationY = event.accelerationIncludingGravity.y; 
+          window.addEventListener('devicemotion', function (e) {
+
+            var accelerationX = e.accelerationIncludingGravity.x;  
             var accelerationY = e.accelerationIncludingGravity.y; 
             joystickR.deltaX()=0;
             joystickR.deltaY()=0; 
