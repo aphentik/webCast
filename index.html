@@ -46,13 +46,15 @@
       // INTERVAL EVENT
       setInterval(function(){
         // If previous value is 0,0
-        if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero=true){
+        if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
 
         }else{
           socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
           if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
             previousIsZero=true;
-          }else previousIsZero=false; 
+          }else {
+            previousIsZero=false; 
+          }
         }
       }, interval *1000);
     </script> 
