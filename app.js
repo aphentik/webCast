@@ -76,7 +76,7 @@ io.sockets.on('connection', function (socket) {
         //console.log('motorLForward='+ motorLForward +' motorLBackward='+motorLBackward+' motorRForward='+ motorRForward+' motorRBackward='+motorRBackward);
         TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });        
         // Read Battery Level 
-        TRex.readBytes(0x0F, 3, function(err, res) {
+        TRex.readBytes(0x0F, 4, function(err, res) {
             // result contains a buffer of bytes
             if(err){
                 console.log("i2c Read battery Error: "+ err);
