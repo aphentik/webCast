@@ -50,10 +50,8 @@
       //Accelerometer initialisation
       gyro.frequency = 100;
       gyro.startTracking(function(o) {
-        var b = document.getElementById('example'),
-            f = document.getElementById('features');
         // o.Y varie de -5 à 5 lors de l'inclinaison de l'iphone (avant basculement de l'écran), on multiplie par 40 pour arriver à 200
-        valY= (o.y)* - 40;
+        valY= (o.y)* 35 * (-1);
       });
 
       // INTERVAL EVENT
