@@ -58,11 +58,11 @@ io.sockets.on('connection', function (socket) {
         if(-pi<=theta && theta<-(pi/2))
         {
         	R = -radius;
-        	L = -radius*(2*theta/pi + pi);
+        	L = -radius*(2*theta/pi + pi/2);
         }
         else if(-pi/2<=theta && theta<0)
         {
-        	R = -radius*(2*theta/pi);
+        	R = radius*(2*theta/pi);
         	L = -radius;
         }
         else if(0<=theta && theta<pi/2)
@@ -73,7 +73,7 @@ io.sockets.on('connection', function (socket) {
         else if(pi/2<=theta && theta<=pi)
         {
         	R = radius;
-        	L = radius *(2*theta/pi + pi);
+        	L = -radius *(2*theta/pi - 3*pi/2);
         }
 	R=parseInt(R);
 	L=parseInt(L);
