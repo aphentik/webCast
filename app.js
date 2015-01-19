@@ -47,33 +47,36 @@ io.sockets.on('connection', function (socket) {
             motorRBackward,
             motorLForward,
             motorLBackward,
-            breakmotor;
+            breakmotor,
+	    R=0,
+	    L=0;
 
         var radius = Math.sqrt(DXL*DXL + DYL*DYL);
         var theta = 2* Math.atan(DYL/(DXL+ radius));
         var pi = Math.PI;
 
-        if(-pi<=theta<-(pi/2))
+        if(-pi<=theta && theta<-(pi/2))
         {
         	R = -radius;
-        	L = -radius*(2*theta/pi - pi);
+        	L = -radius*(2*theta/pi + pi);
         }
-        else if(-pi/2<=theta<0)
+        else if(-pi/2<=theta && theta<0)
         {
-        	R = -radius(2*theta/pi);
+        	R = -radius*(2*theta/pi);
         	L = -radius;
         }
-        else if(0<=theta<pi/2)
+        else if(0<=theta && theta<pi/2)
         {
         	R = radius*2*theta/pi;
         	L = radius;
         }
-        else if(pi/2<=theta<=pi)
+        else if(pi/2<=theta && theta<=pi)
         {
         	R = radius;
         	L = radius *(2*theta/pi + pi);
         }
-
+	R=parseInt(R);
+	L=parseInt(L);
 
         if(R>0){
             motorRForward = R *coeff +offset;
@@ -96,8 +99,8 @@ io.sockets.on('connection', function (socket) {
             motorLBackward = 0;
         };
         breakmotor = 0;
-        //console.log('motorLForward='+ motorLForward +' motorLBackward='+motorLBackward+' motorRForward='+ motorRForward+' motorRBackward='+motorRBackward);
-        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });       
+        console.log('L : '+L+' R :'+R+' radius : '+ radius + ' theta: '+ theta + ' LF='+ motorLForward +' LB='+motorLBackward+' RF='+ motorRForward+' RB='+motorRBackward);
+        //TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });       
 
     });
 });
