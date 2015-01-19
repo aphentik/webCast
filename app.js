@@ -30,7 +30,7 @@ app.get('/', function(req, res) {
 
 // Lors de la connection d'un client 
 io.sockets.on('connection', function (socket) {
-    console.log('New connected client: '+ socket.handshake.address);
+    console.log('New client connected: '+ socket.handshake.address);
 
     // Quand le serveur reçoit un signal de type "Coordinate" du client    
     socket.on('coordinate', function(data){
@@ -100,7 +100,7 @@ io.sockets.on('connection', function (socket) {
         };
         breakmotor = 0;
         console.log('L : '+L+' R :'+R+' radius : '+ radius + ' theta: '+ theta + ' LF='+ motorLForward +' LB='+motorLBackward+' RF='+ motorRForward+' RB='+motorRBackward);
-        //TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });       
+        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });       
 
     });
 });
