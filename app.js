@@ -49,10 +49,32 @@ io.sockets.on('connection', function (socket) {
             motorLBackward,
             breakmotor;
 
-        var V=(200-Math.abs(DXL))*(DYL/200)+DYL;
-        var W=(200-Math.abs(DYL))*(DXL/200)+DXL;
-        var R= parseInt((V+W)/2);
-        var L=parseInt((V-W)/2);
+        var radius = Math.sqrt(DXL*DXL + DYL*DYL);
+        var theta = 2* Math.atan(DYL/(DXL+ radius));
+        var pi = Math.PI;
+
+        if(-pi<=theta<-(pi/2))
+        {
+        	R = -radius;
+        	L = -radius*(2*theta/pi - pi);
+        }
+        else if(-pi/2<=theta<0)
+        {
+        	R = -radius(2*theta/pi);
+        	L = -radius;
+        }
+        else if(0<=theta<pi/2)
+        {
+        	R = radius*2*theta/pi;
+        	L = radius;
+        }
+        else if(pi/2<=theta<=pi)
+        {
+        	R = radius;
+        	L = radius *(2*theta/pi + pi);
+        }
+
+
         if(R>0){
             motorRForward = R *coeff +offset;
             motorRBackward = 0;
