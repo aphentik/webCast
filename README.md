@@ -21,5 +21,4 @@ The web application is based on Node.js plateform, it provide a live video strea
 - Gyro.js
 
 
-=======
->>>>>>> NewControlCode
+
