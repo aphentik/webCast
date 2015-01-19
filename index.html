@@ -4,6 +4,8 @@
         <link rel="stylesheet" href="style/style.css">
     </head>
     <body>
+        <span id="features"></span></p>
+        <span id="example"></span>
         <img id="videofeed" src="http://192.168.10.1:8080/stream/video.mjpeg" alt="If you see this message check the availability of video stream">
         <div id="sticksContainer">
             <div id="stick1"></div>
@@ -13,11 +15,12 @@
     <script type="text/javascript" src="javascripts/virtualjoystick.js"></script>
     <script src="javascripts/jquery-1.11.2.min.js"></script>
     <script src="javascripts/socket.io.js"></script>
+    <script src="javascripts/gyro.js"></script>
     <script type="text/javascript">
       //Define refresh interval (in seconds)
       var interval = 1/10;
-      var acc=0;
-
+      var acc=false;
+      var valY=0;
       var previousIsZero = true;
 
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
@@ -44,13 +47,27 @@
         stickRadius : 200
       });
  
+      //Accelerometer initialisation
+      gyro.frequency = 100;
+      gyro.startTracking(function(o) {
+        var b = document.getElementById('example'),
+            f = document.getElementById('features');
+        // o.Y varie de -5 à 5 lors de l'inclinaison de l'iphone (avant basculement de l'écran), on multiplie par 40 pour arriver à 200
+        valY= (o.y)* - 40;
+      });
+
       // INTERVAL EVENT
       setInterval(function(){
         // If previous value is 0,0
         if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
 
         }else{
-          socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+          // Accelerometer mode ?
+          if(acc==true){
+            socket.emit('coordinate',{DXL: valY, DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+          }else{
+            socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+          }
           if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
             previousIsZero=true;
           }else {
