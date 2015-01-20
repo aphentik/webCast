@@ -24,8 +24,8 @@ var io = require('socket.io').listen(server);
 
 // ROUTES
 app.get('/', function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/html'});
-	res.end(index);	
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(index); 
 });
 
 // Lors de la connection d'un client 
@@ -48,8 +48,8 @@ io.sockets.on('connection', function (socket) {
             motorLForward,
             motorLBackward,
             breakmotor,
-	    R=0,
-	    L=0;
+        R=0,
+        L=0;
 
         var radius = Math.sqrt(DXL*DXL + DYL*DYL);
         var theta = 2* Math.atan(DYL/(DXL+ radius));
@@ -57,49 +57,53 @@ io.sockets.on('connection', function (socket) {
 
         if(-pi<=theta && theta<-(pi/2))
         {
-        	R = -radius;
-        	L = -radius*(2*theta/pi + 2);
+            R = -radius;
+            L = -radius*(2*theta/pi + 2);
         }
         else if(-pi/2<=theta && theta<0)
         {
-        	R = radius*(2*theta/pi);
-        	L = -radius;
+            R = radius*(2*theta/pi);
+            L = -radius;
         }
         else if(0<=theta && theta<pi/2)
         {
-        	R = radius*2*theta/pi;
-        	L = radius;
+            R = radius*2*theta/pi;
+            L = radius;
         }
         else if(pi/2<=theta && theta<=pi)
         {
-        	R = radius;
-        	L = radius* (-2*theta/pi + 2);
+            R = radius;
+            L = radius* (-2*theta/pi + 2);
         }
-	R=-parseInt(R);
-	L=-parseInt(L);
+//  R=parseInt(1/75000*Math.pow(R,3)+1/500*Math.pow(R,2)+1/15*R)
+//  L =parseInt(L);
 
         if(R>0){
+        R=parseInt(1/75000*Math.pow(R,3)+1/500*Math.pow(R,2)+1/15*R)
             motorRForward = R *coeff +offset;
             motorRBackward = 0;
         }else if(R<0){
-            motorRBackward = -(R *coeff)+ offset;
+            R=-parseInt(1/75000*Math.pow(-R,3)+1/500*Math.pow(-R,2)+1/15*-R)
+        motorRBackward = -(R *coeff)+ offset;
             motorRForward = 0;
         }else{
             motorRForward = 0;
             motorRBackward = 0;
         }  
         if(L>0){
+        L=parseInt(1/75000*Math.pow(L,3)+1/500*Math.pow(L,2)+1/15*L)
             motorLForward = L *coeff + offset;
             motorLBackward = 0;
         }else if(L<0) {
-            motorLBackward = -L*coeff+ offset;
+        L=-parseInt(1/75000*Math.pow(-L,3)+1/500*Math.pow(-L,2)+1/15*-L)            
+        motorLBackward = -L*coeff+ offset;
             motorLForward = 0;
         }else{
             motorLForward = 0;
             motorLBackward = 0;
         };
         breakmotor = 0;
-        console.log('L : '+L+' R :'+R+' radius : '+ radius + ' theta: '+ theta + ' LF='+ motorLForward +' LB='+motorLBackward+' RF='+ motorRForward+' RB='+motorRBackward);
+        console.log('L : '+L+ ' R :'+R+' radius : '+ radius + ' theta: '+ theta + ' LF='+ motorLForward +' LB='+motorLBackward+' RF='+ motorRForward+' RB='+motorRBackward);
         TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });       
 
     });
@@ -107,8 +111,8 @@ io.sockets.on('connection', function (socket) {
 
 // Read Battery Level 
 // setInterval(function(){
-//     TRex.readBytes(0x0C, 2, function(err, res) {
-//         // result contains a buffer of bytes
+//     TRex.readBytes(0x0F, 2, function(err, res) {
+         // result contains a buffer of bytes
 //         if(err){
 //             console.log("i2c Read battery Error: "+ err);
 //         };   
@@ -130,5 +134,3 @@ console.log('Server Listening on port '+port);
 console.log('Cast Control Interface: http://192.168.10.1:3000');
 console.log('Camera Settings Interface: http://192.168.10.1:8080');
 console.log('ENJOY YOUR RIDE ;) ');
-    
-
