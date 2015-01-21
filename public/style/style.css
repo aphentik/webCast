@@ -33,5 +33,6 @@
   float: right;
   width: 15%;
   height: 15%;
+  z-index: 30;
 }
 
