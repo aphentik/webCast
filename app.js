@@ -2,7 +2,6 @@ var http = require('http');
 var fs = require('fs');
 var nconf = require('nconf');
   nconf.use('file', { file: './config.json' });
-  nconf.load();
 
 // NEVER use a Sync function except at start-up!
 var index = fs.readFileSync(__dirname + '/index.html');
@@ -20,6 +19,14 @@ var TRex = new i2c(address, {device: '/dev/i2c-1',debug: false});
 var offset = 0;
 var coeff=1;
 
+//Load configuration  
+nconf.load(function (err) {
+if (err) {
+  console.error(err.message);
+  return;
+}
+console.log('Configuration loaded successfully.');
+});
 
 // Set "Public" as root folder for static content
 app.use(express.static(__dirname + '/public'));  
@@ -33,7 +40,6 @@ app.get('/', function(req, res) {
     res.end(index); 
 });
 
-
 nconf.set('acc_mode', 'true');
 nconf.set('control_mode', 'tank');
 
@@ -44,7 +50,7 @@ if (err) {
 }
 console.log('Configuration saved successfully.');
 });
-console.log(nconf.get('acc_mode'));
+//console.log(nconf.get('acc_mode'));
 
 // Lors de la connection d'un client 
 io.sockets.on('connection', function (socket) {
