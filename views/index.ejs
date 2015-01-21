@@ -24,6 +24,10 @@
       var previousIsZero = true;
       var acc= false;
 
+      var config = <%= nconf %>;
+
+      console.log(config.get('acc_mode'));
+
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');
 
