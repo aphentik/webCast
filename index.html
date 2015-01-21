@@ -20,9 +20,10 @@
     <script type="text/javascript">
       //Define refresh interval (in seconds)
       var interval = 1/10;
-      var acc=false;
       var valY=0;
       var previousIsZero = true;
+      var config = require('./config.json');
+      var acc= config.acc_mode;
 
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');

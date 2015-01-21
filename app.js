@@ -1,5 +1,6 @@
 var http = require('http');
 var fs = require('fs');
+var config = require('./config.json');
 // NEVER use a Sync function except at start-up!
 var index = fs.readFileSync(__dirname + '/index.html');
 var express = require('express');
@@ -75,10 +76,10 @@ io.sockets.on('connection', function (socket) {
             R = radius;
             L = radius* (-2*theta/pi + 2);
         }
-//  R=parseInt(1/75000*Math.pow(R,3)+1/500*Math.pow(R,2)+1/15*R)
-//  L =parseInt(L);
+        //  R=parseInt(1/75000*Math.pow(R,3)+1/500*Math.pow(R,2)+1/15*R)
+        //  L =parseInt(L);
 
-        if(R>0){
+            if(R>0){
         R=parseInt(1/75000*Math.pow(R,3)+1/500*Math.pow(R,2)+1/15*R)
             motorRForward = R *coeff +offset;
             motorRBackward = 0;
