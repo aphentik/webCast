@@ -37,8 +37,8 @@ app.use(express.static(__dirname + '/public'));
 var io = require('socket.io').listen(server);
 
 
-nconf.set('acc_mode', 'true');
-nconf.set('control_mode', 'tank');
+//nconf.set('acc_mode', 'false');
+//nconf.set('control_mode', 'tank');
 
 
 // ROUTES
