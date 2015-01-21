@@ -7,6 +7,7 @@ var nconf = require('nconf');
 var index = fs.readFileSync(__dirname + '/index.html');
 var express = require('express');
 var app = express();
+    app.engine('html', require('ejs').renderFile);
 // Server variables
 var port= 3000;
 var server = app.listen(port);
