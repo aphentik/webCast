@@ -39,7 +39,9 @@ var io = require('socket.io').listen(server);
 // ROUTES
 app.get('/', function(req, res) {
     //res.writeHead(200, {'Content-Type': 'text/html'});
-    res.render('index.ejs'); 
+    res.render('index.ejs'{ 
+    config: nconf
+  }); 
 });
 
 nconf.set('acc_mode', 'true');
