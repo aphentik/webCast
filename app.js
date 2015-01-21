@@ -45,8 +45,8 @@ nconf.set('control_mode', 'tank');
 app.get('/', function(req, res) {
     //res.writeHead(200, {'Content-Type': 'text/html'});
 
-    var control_md=nconf.get(control_mode);
-    var acc_md=nconf.get(acc_mode);
+    var control_md=nconf.get('control_mode');
+    var acc_md=nconf.get('acc_mode');
     res.render('index.ejs',{ 
     control_mode: control_md,
     acc_mode: acc_md
