@@ -36,16 +36,24 @@ app.use(express.static(__dirname + '/public'));
 // Socket.io loading
 var io = require('socket.io').listen(server);
 
-// ROUTES
-app.get('/', function(req, res) {
-    //res.writeHead(200, {'Content-Type': 'text/html'});
-    res.render('index.ejs',{ 
-    config: nconf
-  }); 
-});
 
 nconf.set('acc_mode', 'true');
 nconf.set('control_mode', 'tank');
+
+
+// ROUTES
+app.get('/', function(req, res) {
+    //res.writeHead(200, {'Content-Type': 'text/html'});
+
+    var control_md=nconf.get(control_mode);
+    var acc_md=nconf.get(acc_mode);
+    res.render('index.ejs',{ 
+    control_mode: control_md,
+    acc_mode: acc_md
+  }); 
+});
+
+
 
 nconf.save(function (err) {
 if (err) {
