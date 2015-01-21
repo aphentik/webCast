@@ -146,16 +146,6 @@ io.sockets.on('connection', function (socket) {
 //     }); 
 // }, 10 *1000);
 
-// Production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
-
 console.log('Server Listening on port '+port);
 console.log('Cast Control Interface: http://192.168.10.1:3000');
 console.log('Camera Settings Interface: http://192.168.10.1:8080');
