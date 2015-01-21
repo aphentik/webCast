@@ -53,6 +53,17 @@ app.get('/', function(req, res) {
   }); 
 });
 
+app.get('/settings', function(req, res) {
+    //res.writeHead(200, {'Content-Type': 'text/html'});
+
+    var control_md=nconf.get('control_mode');
+    var acc_md=nconf.get('acc_mode');
+    res.render('settings.ejs',{ 
+    control_mode: control_md,
+    acc_mode: acc_md
+  }); 
+});
+
 
 
 nconf.save(function (err) {
