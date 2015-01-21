@@ -34,10 +34,8 @@ app.get('/', function(req, res) {
 });
 
 
-nconf.set('acc_mode', true);
+nconf.set('acc_mode', 'true');
 nconf.set('control_mode', 'tank');
-
-
 
 nconf.save(function (err) {
 if (err) {
