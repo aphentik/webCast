@@ -22,8 +22,7 @@
       var interval = 1/10;
       var valY=0;
       var previousIsZero = true;
-      var config = require('./config.json');
-      var acc= config.acc_mode;
+      var acc= false;
 
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');

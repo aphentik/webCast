@@ -1,6 +1,8 @@
 var http = require('http');
 var fs = require('fs');
-var config = require('./config.json');
+var nconf = require('nconf');
+    nconf.file({file:'./config.json'});
+
 // NEVER use a Sync function except at start-up!
 var index = fs.readFileSync(__dirname + '/index.html');
 var express = require('express');
@@ -28,6 +30,8 @@ app.get('/', function(req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(index); 
 });
+
+nconf.set('acc_control', true);
 
 // Lors de la connection d'un client 
 io.sockets.on('connection', function (socket) {
