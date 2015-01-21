@@ -4,7 +4,7 @@ var nconf = require('nconf');
   nconf.use('file', { file: './config.json' });
 
 // NEVER use a Sync function except at start-up!
-var index = fs.readFileSync(__dirname + '/index.html');
+//var index = fs.readFileSync(__dirname + '/index.html');
 var express = require('express');
 var app = express();
     app.engine('html', require('ejs').renderFile);
@@ -37,8 +37,8 @@ var io = require('socket.io').listen(server);
 
 // ROUTES
 app.get('/', function(req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.render(index); 
+    //res.writeHead(200, {'Content-Type': 'text/html'});
+    res.render('index'); 
 });
 
 nconf.set('acc_mode', 'true');
