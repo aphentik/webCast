@@ -8,6 +8,7 @@ var nconf = require('nconf');
 var express = require('express');
 var app = express();
     app.engine('html', require('ejs').renderFile);
+    app.set('view engine', 'ejs');
 // Server variables
 var port= 3000;
 var server = app.listen(port);
