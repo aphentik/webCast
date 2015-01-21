@@ -23,17 +23,6 @@
       var valY=0;
       var previousIsZero = true;
       var acc= false;
-      var nconf = require('nconf');
-      nconf.use('file', { file: './config.json' });
-
-      //Load configuration  
-      nconf.load(function (err) {
-      if (err) {
-        console.error(err.message);
-        return;
-      }
-      alert('Configuration loaded successfully.');
-      });
 
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');
