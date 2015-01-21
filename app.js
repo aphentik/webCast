@@ -44,7 +44,7 @@ nconf.set('control_mode', 'tank');
 app.get('/', function(req, res) {
     //res.writeHead(200, {'Content-Type': 'text/html'});
     res.render('index.ejs',nconf);
-};
+});
 
 
 
