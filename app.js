@@ -19,6 +19,8 @@ var TRex = new i2c(address, {device: '/dev/i2c-1',debug: false});
 var offset = 0;
 var coeff=1;
 
+nconf.set('acc:control', "true");
+
 // Set "Public" as root folder for static content
 app.use(express.static(__dirname + '/public'));  
 
@@ -30,8 +32,6 @@ app.get('/', function(req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(index); 
 });
-
-nconf.set('acc_control', true);
 
 // Lors de la connection d'un client 
 io.sockets.on('connection', function (socket) {
