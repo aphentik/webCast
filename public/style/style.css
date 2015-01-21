@@ -27,3 +27,11 @@
   height: 100%;
 }
 
+#settings {
+  position: static !important;
+  display: inline-block;
+  float: right;
+  width: 15%;
+  height: 15%;
+}
+
