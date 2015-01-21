@@ -34,11 +34,10 @@ app.get('/', function(req, res) {
 });
 
 
-nconf.set('name', 'Avian');
-nconf.set('dessert:name', 'Ice Cream');
-nconf.set('dessert:flavor', 'chocolate');
+nconf.set('acc_mode', true);
+nconf.set('control_mode', 'tank');
 
-console.log(nconf.get('dessert'));
+
 
 nconf.save(function (err) {
 if (err) {
@@ -47,6 +46,7 @@ if (err) {
 }
 console.log('Configuration saved successfully.');
 });
+console.log(nconf.get('acc_mode'));
 
 // Lors de la connection d'un client 
 io.sockets.on('connection', function (socket) {
