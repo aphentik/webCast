@@ -1,4 +1,4 @@
 {
-	"acc_mode": "false",
-	"control_mode": "polar"
+  "acc_mode": "true",
+  "control_mode": "tank"
 }
