@@ -29,10 +29,10 @@
 
 #settings {
   float: right;
-  width: 15%;
+  width: 7%;
   height: 15%;
   margin: auto;
-  position: absolute;
   z-index: 3;
+  position: relative;
 }
 
