@@ -133,8 +133,6 @@ io.sockets.on('connection', function (socket) {
                 R = radius;
                 L = radius* (-2*theta/pi + 2);
             }
-            //  R=parseInt(1/75000*Math.pow(R,3)+1/500*Math.pow(R,2)+1/15*R)
-            //  L =parseInt(L);
 
             if(R>0){
             R=parseInt(1/75000*Math.pow(R,3)+1/500*Math.pow(R,2)+1/15*R)
@@ -142,7 +140,7 @@ io.sockets.on('connection', function (socket) {
                 motorRBackward = 0;
             }else if(R<0){
                 R=-parseInt(1/75000*Math.pow(-R,3)+1/500*Math.pow(-R,2)+1/15*-R)
-            motorRBackward = -(R *coeff)+ offset;
+                motorRBackward = -(R *coeff)+ offset;
                 motorRForward = 0;
             }else{
                 motorRForward = 0;
@@ -154,7 +152,7 @@ io.sockets.on('connection', function (socket) {
                 motorLBackward = 0;
             }else if(L<0) {
             L=-parseInt(1/75000*Math.pow(-L,3)+1/500*Math.pow(-L,2)+1/15*-L)            
-            motorLBackward = -L*coeff+ offset;
+                motorLBackward = -L*coeff+ offset;
                 motorLForward = 0;
             }else{
                 motorLForward = 0;
