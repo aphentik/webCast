@@ -28,6 +28,7 @@
 }
 
 #settings {
+  opacity: 0.4;
   float: right;
   width: 7%;
   height: 15%;
