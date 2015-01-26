@@ -213,7 +213,7 @@ if (DXR == 0 && DYR == 0)
     };
 
         // Sending command via i2c
-        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor],angleConfiguration, speedPitch, speedYaw function(err) { if(err){console.log("i2c Error: "+ err);} });       
+        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor,angleConfiguration, speedPitch, speedYaw], function(err) { if(err){console.log("i2c Error: "+ err);} });       
 
     });
 });
