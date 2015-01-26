@@ -18,7 +18,7 @@
 #include <Servo.h>                                     // library to drive up to 12 servos using timer1
 #include <EEPROM.h>                                    // library to access EEPROM memory
 #include "IOpins.h"                                    // defines which I/O pin is used for what function
-
+#include "RunningAverage.h"
 
 // define constants here
 #define startbyte 0x0F                                 // for serial communications each datapacket must start with this byte
@@ -35,6 +35,7 @@ byte lmbrake,rmbrake;                                  // left and right brakes 
 int lmcur,rmcur;                                       // left and right motor current
 int lmenc,rmenc;                                       // left and right encoder values
 int volts;                                             // battery voltage*10 (accurate to 1 decimal place)
+RunningAverage averageVolts(10);
 int xaxis,yaxis,zaxis;                                 // X, Y, Z accelerometer readings
 int deltx,delty,deltz;                                 // X, Y, Z impact readings 
 int magnitude;                                         // impact magnitude
@@ -42,6 +43,8 @@ byte devibrate=50;                                     // number of 2mS interval
 int sensitivity=50;                                    // minimum magnitude required to register as an impact
 byte RCdeadband=35;                                    // RCsignal can vary this much from 1500uS without controller responding
 unsigned long lastI2C;                                    // timer used to monitor accelerometer and encoders
+unsigned long lastAverage;                                    // timer used to monitor accelerometer and encoders
+boolean batteryAvailable;
 
 unsigned long time; 
 
@@ -70,7 +73,7 @@ void setup()
 
   Serial.begin(9600);
   //all IO pins are input by default on powerup --------- configure motor control pins for output -------- pwm autoconfigures -----------
-
+ 
   pinMode(lmpwmpin,OUTPUT);                            // configure left  motor PWM       pin for output
   pinMode(lmdirpin,OUTPUT);                            // configure left  motor direction pin for output
   pinMode(lmbrkpin,OUTPUT);                            // configure left  motor brake     pin for output
@@ -119,14 +122,18 @@ void setup()
     }
     
     Wire.begin(I2Caddress);                            // join I²C bus as a slave at I2Caddress
-    Wire.onReceive(I2Ccommand);                        // specify ISR for data received
     Wire.onRequest(I2Cstatus);                         // specify ISR for data to be sent
+    Wire.onReceive(I2Ccommand);                        // specify ISR for data received
+   
   }
   if(mode==2)
   {
     TTLConfig();
   }
-
+  
+   averageVolts.clear(); // explicitly start clean
+   lastAverage = 0;
+   batteryAvailable = true;
 }
 
 
@@ -149,7 +156,8 @@ void loop()
    //int roro=0;
    //mode = 200;
    //int j = mode;
-   //sSerial.println(j);
+   //Serial.println(j);
+  // DiagnosticMode();
    if(millis()-lastI2C>1000)
    {
      Shutdown();
@@ -210,12 +218,24 @@ void loop()
       lmcur=(analogRead(lmcurpin)-511)*48.83;          // read  left motor current sensor and convert reading to mA
       rmcur=(analogRead(rmcurpin)-511)*48.83;          // read right motor current sensor and convert reading to mA
       volts=analogRead(voltspin)*10/3.357;             // read battery level and convert to volts with 2 decimal places (eg. 1007 = 10.07 V)
-      if(volts<lowbat)
+      if(millis()-lastAverage>1000)
       {
-      mode=3; 
-      Serial.println("No more battery");        // change to shutdown mode if battery voltage too low
-      MotorBeep(5);
+        lastAverage = millis();
+        averageVolts.addValue(volts);
+        //Serial.println(averageVolts.getAverage());
+        if(averageVolts.getAverage()<lowbat && batteryAvailable==true)
+        {
+          Serial.println("No more battery");        // change to shutdown mode if battery voltage too low
+          MotorBeep(5);
+          batteryAvailable = false;
+          averageVolts.clear();
+        }
+        else if (averageVolts.getAverage()>=lowbat)
+        {
+          batteryAvailable = true;
+        }
       }
+       
     }
   }
 }

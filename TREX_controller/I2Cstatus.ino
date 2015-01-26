@@ -1,14 +1,17 @@
 //------------------------------------------------- Report control status to I²C Master -------------------------------------------------------- 
 void I2Cstatus()
 {
-  byte datapack[24];                             // array to store data packet in prior to transmission
-  datapack[0]=startbyte;                         // each packet starts with startbyte
-  datapack[1]=errorflag;                         // nonzero if bad data received - Master must wait until buffer has been flushed and send again
+
+  byte datapack[2];                             // array to store data packet in prior to transmission
+  datapack[0]=0x08;//startbyte;                    // each packet starts with startbyte
+  //datapack[1]=errorflag;                         // nonzero if bad data received - Master must wait until buffer has been flushed and send again
   
-  datapack[2]=highByte(volts);                   // battery voltage      high byte
-  datapack[3]= lowByte(volts);                   // battery voltage      low  byte
+  datapack[1]=highByte(volts);                   // battery voltage      high byte
+  //datapack[2]= lowByte(volts);                   // battery voltage      low  byte
+  Wire.write(datapack,2);                       // transmit data packet of 24 bytes
   
-  datapack[4]=highByte(lmcur);                   // left  motor current  high byte
+  Serial.println(volts);
+  /*datapack[4]=highByte(lmcur);                   // left  motor current  high byte
   datapack[5]= lowByte(lmcur);                   // left  motor current  low  byte
   
   datapack[6]=highByte(lmenc);                   // left  motor encoder  high byte 
@@ -39,7 +42,7 @@ void I2Cstatus()
   datapack[23]= lowByte(deltz);                  // Z-axis impact data   low  byte
   
   Wire.write(datapack,24);                       // transmit data packet of 24 bytes
-  errorflag=0;                                   // reset erroflag once error has been reported to I²C Master
+  errorflag=0;                                   // reset erroflag once error has been reported to I²C Master*/
   /*
   Serial.println("Status data packet sent to Master:");
   for(byte i=0;i<24;i++)

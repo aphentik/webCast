@@ -7,7 +7,7 @@ void I2Ccommand(int recvflag)
   byte boolForwardRight;
   byte b;                                                                      // byte from buffer
   int i;      // integer from buffer
-  int compteur =0;
+  //int compteur =0;
   errorflag =0;
   lastI2C = millis();
   do                                                                           // check for start byte
@@ -39,7 +39,7 @@ void I2Ccommand(int recvflag)
   if(errorflag > 1)
   {
     Serial.println(errorflag);
-    Serial.println(compteur);
+    //Serial.println(compteur);
     return;
   }
   
@@ -283,6 +283,7 @@ void I2Ccommand(int recvflag)
   //rmspeed=200;
   mode=0;                                                                      // breaks out of Shutdown mode when I²C command is given
   Motors();                                                                    // update brake, speed and direction of motors
+  //I2Cstatus();
   //Servos();                                                                    // update servo positions
 }
 
