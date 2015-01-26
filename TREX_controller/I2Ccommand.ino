@@ -2,62 +2,53 @@
 //------------------------------------------------------------------------------- Receive commands from I²C Master -----------------------------------------------
 void I2Ccommand(int recvflag)     
 {
-  //Serial.println("I2Ccommand");
+
   byte boolForwardLeft;
   byte boolForwardRight;
+  byte angleConfiguration;
+  byte speedYaw;
+  byte speedPitch;
   byte b;                                                                      // byte from buffer
   int i;      // integer from buffer
-  //int compteur =0;
+
   errorflag =0;
   lastI2C = millis();
   do                                                                           // check for start byte
   {
-    //Shutdown();
-    //return;
-    //MotorBeep(1);
+  
     b=Wire.read();    // read a byte from the buffer
-    //Serial.print("Start byte ");
-    
-    //Serial.println(b);
-    
-    //Serial.print("Packet size ");
-    //Serial.println(recvflag);
+
     //Changer flag to size of packet
     if(b!=startbyte) errorflag = errorflag | 1;                 // if byte does not equal startbyte or Master request incorrect number of bytes then generate error
     if(recvflag!=6) errorflag = errorflag | 64;
-    //compteur ++;
+
   } while (errorflag>0 && Wire.available()>0);                                 // if errorflag>0 then empty buffer of corrupt data
   
   if(errorflag==1)                                                              // corrupt data received 
   {
     Serial.println("I2CcommandError");
     Serial.println(recvflag);
-    //Serial.println(errorflag);
     Shutdown();                                                                // shut down motors and servos
     return;                                                                    // wait for valid data packet
   } 
   if(errorflag > 1)
   {
     Serial.println(errorflag);
-    //Serial.println(compteur);
     return;
   }
   
   
   //Serial.println("I2CcommandSuite");
   //----------------------------------------------------------------------------- valid data packet received ------------------------------
-  b=Wire.read();                                                               // read pwmfreq from the buffer
-  if(b>=0 && b<256)                                                               // if value is valid (1-7)  
+  b=Wire.read();                                                               // read left motor speed (positive value) from the buffer
+  if(b>=0 && b<256)                                                               // if value is valid  
   {
-    //pwmfreq=b;                                                                 // update pwmfreq
-    //TCCR2B = TCCR2B & B11111000 | pwmfreq;                                     // change timer 2 clock pre-scaler
-    //Serial.print("First byte");
-    
+
     if(b!=0)
     {
       lmspeed=b;
       boolForwardLeft=0;
-      //Serial.println(lmspeed);
+
     }
     else
     {
@@ -67,35 +58,27 @@ void I2Ccommand(int recvflag)
   }
   else
   {
-    errorflag = errorflag | 2;                                                 // incorrect pwmfreq given
+    errorflag = errorflag | 2;                                                 // incorrect value given
   }
   
   
-   b=Wire.read();                                                               // read pwmfreq from the buffer
-  if(b>=0 && b<256)                                                               // if value is valid (1-7)  
+   b=Wire.read();                                                               // read left motor speed (negative value) from the buffer
+  if(b>=0 && b<256)                                                               // if value is valid
   {
-    //pwmfreq=b;                                                                 // update pwmfreq
-    //TCCR2B = TCCR2B & B11111000 | pwmfreq;                                     // change timer 2 clock pre-scaler
-   // Serial.print("Second byte");
+
     if(b!=0)
     {
         if(boolForwardLeft==1)
         {
           lmspeed=b;
-          lmspeed=-lmspeed; 
-          //Serial.println(lmspeed);   
+          lmspeed=-lmspeed;   
         }
-        else
-         {
-         //Serial.println("Avance et Recule!!!");
-         //Shutdown();
-          //return;
-         }
+
     }
     else{
           if(boolForwardLeft==1)
           {
-          lmspeed =b;
+          lmspeed=b;
           }
         }
   }
@@ -107,12 +90,10 @@ void I2Ccommand(int recvflag)
   
   
   
-  b=Wire.read();                                                               // read pwmfreq from the buffer
-  if(b>=0 && b<256)                                                               // if value is valid (1-7)  
+  b=Wire.read();                                                               // read right motor speed (positive value) from the buffer
+  if(b>=0 && b<256)                                                               // if value is valid  
   {
-    //pwmfreq=b;                                                                 // update pwmfreq
-    //TCCR2B = TCCR2B & B11111000 | pwmfreq;                                     // change timer 2 clock pre-scaler
-    //Serial.print("First byte");
+    
     
     if(b!=0)
     {
@@ -128,16 +109,14 @@ void I2Ccommand(int recvflag)
   }
   else
   {
-    errorflag = errorflag | 8;                                                 // incorrect pwmfreq given
+    errorflag = errorflag | 8;                                                 // incorrect value given
   }
   
   
-   b=Wire.read();                                                               // read pwmfreq from the buffer
-  if(b>=0 && b<256)                                                               // if value is valid (1-7)  
+   b=Wire.read();                                                               // read right motor speed (negative value)from the buffer
+  if(b>=0 && b<256)                                                               // if value is valid  
   {
-    //pwmfreq=b;                                                                 // update pwmfreq
-    //TCCR2B = TCCR2B & B11111000 | pwmfreq;                                     // change timer 2 clock pre-scaler
-   // Serial.print("Second byte");
+
     if(b!=0)
     {
         if(boolForwardRight==1)
@@ -146,12 +125,7 @@ void I2Ccommand(int recvflag)
           rmspeed=-rmspeed; 
           //Serial.println(rmspeed);   
         }
-        else
-         {
-         //Serial.println("Avance et Recule!!!");
-         //Shutdown();
-          //return;
-         }
+
     }
     else{
           if(boolForwardRight==1)
@@ -162,11 +136,11 @@ void I2Ccommand(int recvflag)
   }
   else
   {
-    errorflag = errorflag | 16;                                                 // incorrect pwmfreq given
+    errorflag = errorflag | 16;                                                 // incorrect value given
   }
   
-     b=Wire.read();                                                               // read pwmfreq from the buffer
-  if(b==0 || b==1)                                                               // if value is valid (1-7)  
+ b=Wire.read();                                                               // read brake value from the buffer
+  if(b==0 || b==1)                                                               // if value is valid 
   {
 
    if(b==1)
@@ -182,109 +156,78 @@ void I2Ccommand(int recvflag)
   }
   else
   {
-    errorflag = errorflag | 32;                                                 // incorrect pwmfreq given
+    errorflag = errorflag | 32;                                                 // incorrect value given
   }
- /* b=Wire.read();                                                               // read pwmfreq from the buffer
-  if(b>0 && b<8)                                                               // if value is valid (1-7)  
+  
+   b=Wire.read();                                                               // read joystick Camera mode from the buffer
+  if(b>=0 && b<5)                                                               // if value is valid
   {
-    pwmfreq=b;                                                                 // update pwmfreq
-    TCCR2B = TCCR2B & B11111000 | pwmfreq;                                     // change timer 2 clock pre-scaler
+    angleConfiguration = b; 
   }
   else
   {
-    errorflag = errorflag | 2;                                                 // incorrect pwmfreq given
+    errorflag = errorflag | 64;                                                 // incorrect pwmfreq given
   }
-  
-  i=Wire.read()*256+Wire.read();                                               // read integer from I²C buffer
-  if(i>-256 && i<256)
+
+  b=Wire.read();                                                               // read Pitch speed from the buffer
+  if(b>=0 && b<256)                                                               // if value is valid
   {
-    lmspeed=i;                                                                 // read new speed for   left  motor
-  }
-  else
-  {
-    errorflag = errorflag | 4;                                                 // incorrect motor speed given
-  }
-  lmbrake=Wire.read();                                                         // read new left  motor brake status
-  
-  i=Wire.read()*256+Wire.read();                                               // read integer from I²C buffer
-  if(i>-256 && i<256)
-  {
-    rmspeed=i;                                                                 // read new speed for   right motor
+    speedPitch = b;
   }
   else
   {
-    errorflag = errorflag | 4;                                                 // incorrect motor speed given
-  }
-  rmbrake=Wire.read();                                                         // read new right motor brake status
-  
-  if(errorflag & 4)                                                            // incorrect motor speed / shutdown motors 
-  {
-    lmspeed=0;                                                                 // set left  motor speed to 0
-    rmspeed=0;                                                                 // set right motor speed to 0
-  }
-    
-  for(byte j=0;j<6;j++)                                                        // read position information for 6 servos
-  {
-    i=Wire.read()*256+Wire.read();                                             // read integer from I²C buffer
-    if(abs(i)>2400) errorflag = errorflag | 8;                                 // incorrect servo position given
-    servopos[j]=i;                                                             // read new servo position -- 0 = no servo present
+    errorflag = errorflag | 128;                                                 // incorrect pwmfreq given
   }
   
-  devibrate=Wire.read();                                                       // update devibrate setting - default=50 (100mS)
-  i=Wire.read()*256+Wire.read();
-  if(i>-1 && i<1024)
+   b=Wire.read();                                                               // read Yaw speed from the buffer
+  if(b>=0 && b<256)                                                               // if value is valid
   {
-    sensitivity=i;                                                             // impact sensitivity from 0-1023 - default is 50
+    speedYaw = b;
   }
   else
   {
-    errorflag = errorflag | 16;                                                // incorrect sensitivity given
+    errorflag = errorflag | 256;                                                 // incorrect pwmfreq given
   }
   
-  i=Wire.read()*256+Wire.read();                                               // read integer from I²C buffer
-  if(i>549 && i<3001)
+  if(angleConfiguration==1)
   {
-    lowbat=i;                                                                  // set low battery value (values higher than battery voltage will force a shutdown)
-  }
-  else
-  {
-    errorflag = errorflag | 32;                                                // incorrect lowbat given
-  }
-  
-  b=Wire.read();                                                               // read byte from buffer
-  if(b<128)
-  {
-    I2Caddress=b;                                                              // change I²C address
-    EEPROM.write(1,b);                                                         // update EEPROM with new I²C address
-  }
-  else
-  {
-    errorflag = errorflag | 64;                                                // incorrect I²C address given
+  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(-20);
+  c.speedPITCH = speedPitch * SBGC_SPEED_SCALE;
+  c.angleYAW = SBGC_DEGREE_TO_ANGLE(-360);
+  c.speedYAW = speedYaw * SBGC_SPEED_SCALE;
+  SBGC_sendCommand(SBGC_CMD_CONTROL, &c, sizeof(c));
   }
   
-  b=Wire.read();                                                               // read byte from buffer
-  if(b<2)
+   if(angleConfiguration==2)
   {
-    i2cfreq=b;                                                                 // 0=I²C clock 100kHz  -  >0=I²C clock 400kHz
-    if(i2cfreq==0)                                                             // thanks to Nick Gammon: http://gammon.com.au/i2c
-    {
-      TWBR=72;                                                                 // default I²C clock is 100kHz
-    }
-    else
-    {
-      TWBR=12;                                                                 // change the I²C clock to 400kHz
-    } 
+  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(-20);
+  c.speedPITCH = speedPitch * SBGC_SPEED_SCALE;
+  c.angleYAW = SBGC_DEGREE_TO_ANGLE(360);
+  c.speedYAW = speedYaw * SBGC_SPEED_SCALE;
+  SBGC_sendCommand(SBGC_CMD_CONTROL, &c, sizeof(c));
   }
-  else
+  
+   if(angleConfiguration==3)
   {
-    errorflag = errorflag | 128;                                               // incorrect i2cfreq given
-  }*/
-  //lmspeed=200;
-  //rmspeed=200;
+  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(90);
+  c.speedPITCH = speedPitch * SBGC_SPEED_SCALE;
+  c.angleYAW = SBGC_DEGREE_TO_ANGLE(-360);
+  c.speedYAW = speedYaw * SBGC_SPEED_SCALE;
+  SBGC_sendCommand(SBGC_CMD_CONTROL, &c, sizeof(c));
+  }
+  
+   if(angleConfiguration==4)
+  {
+  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(90);
+  c.speedPITCH = speedPitch * SBGC_SPEED_SCALE;
+  c.angleYAW = SBGC_DEGREE_TO_ANGLE(360);
+  c.speedYAW = speedYaw * SBGC_SPEED_SCALE;
+  SBGC_sendCommand(SBGC_CMD_CONTROL, &c, sizeof(c));
+  }
+
   mode=0;                                                                      // breaks out of Shutdown mode when I²C command is given
   Motors();                                                                    // update brake, speed and direction of motors
-  //I2Cstatus();
-  //Servos();                                                                    // update servo positions
+                                                              
 }
 
 

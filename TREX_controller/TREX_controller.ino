@@ -13,7 +13,9 @@
 //                 T'REX robot controller designed and programmed by Russell Cameron for DAGU Hi-Tech Electronics                      //
 //=====================================================================================================================================//
 
-
+#include <inttypes.h>
+#include <SBGC.h>
+#include <SBGC_Arduino.h>
 #include <Wire.h>                                      // interrupt based I2C library
 #include <Servo.h>                                     // library to drive up to 12 servos using timer1
 #include <EEPROM.h>                                    // library to access EEPROM memory
@@ -22,6 +24,8 @@
 
 // define constants here
 #define startbyte 0x0F                                 // for serial communications each datapacket must start with this byte
+// delay between commands, ms
+#define SBGC_CMD_DELAY 20
 
 // define global variables here
 byte mode=0;                                           // mode=0: I2C / mode=1: Radio Control / mode=2: TTL(Bluetooth) / mode=3: Shutdown
@@ -47,6 +51,8 @@ unsigned long lastAverage;                                    // timer used to m
 boolean batteryAvailable;
 
 unsigned long time; 
+
+SBGC_cmd_control_data c = { 0, 0, 0, 0, 0, 0, 0 };
 
 byte servopin[6]={7,8,12,13,5,6};                      // array stores IO pin for each servo
 int servopos[6];                                       // array stores position data for up to 6 servos
@@ -130,6 +136,11 @@ void setup()
   {
     TTLConfig();
   }
+  
+      SBGC_Demo_setup();
+      // Take a pause to let gimbal controller to initialize
+      delay(3000);
+      c.mode = SBGC_CONTROL_MODE_ANGLE;
   
    averageVolts.clear(); // explicitly start clean
    lastAverage = 0;
