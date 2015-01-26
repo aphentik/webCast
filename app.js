@@ -102,13 +102,14 @@ io.sockets.on('connection', function (socket) {
             motorLBackward,
             breakmotor;
         
+// =================  MOBILE BASE MOVEMENT =====================================        
         // Control mode choice
         if(control_md=="polar"){
 
             // POLAR MODE
             var R=0,
                 L=0;
-
+            //  Passage en coordonnées Polaires
             var radius = Math.sqrt(DXL*DXL + DYL*DYL);
             var theta = 2* Math.atan(DYL/(DXL+ radius));
             var pi = Math.PI;
@@ -188,9 +189,31 @@ io.sockets.on('connection', function (socket) {
         }
         breakmotor = 0;
         //console.log('L : '+L+ ' R :'+R+' radius : '+ radius + ' theta: '+ theta + ' LF='+ motorLForward +' LB='+motorLBackward+' RF='+ motorRForward+' RB='+motorRBackward);
-        
+
+// =================== CAMERA MOVEMENT ===============================================
+var speedYaw,
+    speedPitch,
+    angleConfiguration;
+
+if (DXR == 0 && DYR == 0) 
+    {
+        speedPitch = speedYaw = 0;
+    } else{
+        speedYaw    = parseInt(3*DXR/5);
+        speedPitch  = parseInt(3*DYR/5);
+        if (DXR<0 && DYR<0) {
+            angleConfiguration = 1;
+        }else if (DXR>0 && DYR<0) {
+            angleConfiguration = 2;
+        }else if (DXR<0 && DYR>0) {
+            angleConfiguration = 3;
+        }else if (DXR>0 && DYR>0) {
+            angleConfiguration = 4;
+        }
+    };
+
         // Sending command via i2c
-        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });       
+        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor],angleConfiguration, speedPitch, speedYaw function(err) { if(err){console.log("i2c Error: "+ err);} });       
 
     });
 });
