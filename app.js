@@ -110,8 +110,8 @@ io.sockets.on('connection', function (socket) {
                 speedPitch = 0;
                 speedYaw = 0;
             } else{
-                speedYaw    = parseInt(3*DXR/5);
-                speedPitch  = parseInt(3*DYR/5);
+                speedYaw    = parseInt(Math.abs(3*DXR/5));
+                speedPitch  = parseInt(Math.abs(3*DYR/5));
                 if (DXR<0 && DYR<0) {
                     angleConfiguration = 1;
                 }else if (DXR>0 && DYR<0) {
