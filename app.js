@@ -23,11 +23,11 @@ var coeff=1;
 app.use(express.static(__dirname + '/public'));
 //Load settings 
 nconf.load(function (err) {
-if (err) {
-  console.error(err.message);
-  return;
-}
-console.log('Configuration loaded successfully.');
+    if (err) {
+      console.error(err.message);
+      return;
+    };
+    console.log('Configuration loaded successfully.');
 });
 var control_md=nconf.get('control_mode');
 var acc_md=nconf.get('acc_mode');
@@ -38,7 +38,7 @@ var io = require('socket.io').listen(server);
 
 
 //============== ROUTES ============================================================
-//index
+//---> index
 app.get('/', function(req, res) {
     //res.writeHead(200, {'Content-Type': 'text/html'});
 
@@ -48,7 +48,7 @@ app.get('/', function(req, res) {
   }); 
 });
 
-//settings page
+// ---> settings page
 app.get('/settings', function(req, res) {
     //res.writeHead(200, {'Content-Type': 'text/html'});
 
@@ -59,7 +59,7 @@ app.get('/settings', function(req, res) {
         acc_mode: acc_md
   }); 
 });
-//editsettings (post method)
+// ---> editsettings (post method)
 app.post('/editsettings', function(req,res){
 
     control_md= req.body.control_mode;
@@ -85,7 +85,7 @@ app.post('/editsettings', function(req,res){
 io.sockets.on('connection', function (socket) {
     console.log('New client connected: '+ socket.handshake.address);
 
-
+    // Quand le serveur reçoit un signal de type "CoordinateCam" du client (envoi des commandes pour la basecam venant du stick droit) 
     socket.on('coordinateCam', function(data){ 
         var DXR = data.DXR;
         var DYR = data.DYR;
@@ -115,10 +115,9 @@ io.sockets.on('connection', function (socket) {
 
         // Sending command via i2c
         TRex.writeBytes(0x0E, [angleConfiguration, speedPitch, speedYaw], function(err) { if(err){console.log("i2c Error: "+ err);} });       
-
     });
 
-    // Quand le serveur reçoit un signal de type "Coordinate" du client    
+    // Quand le serveur reçoit un signal de type "CoordinateRob" du client (envoi des commandes pour le robot venant du stick gauche) 
     socket.on('coordinateRob', function(data){
         // Récupération des coordonnées 
         var DXL = data.DXL;
@@ -135,11 +134,11 @@ io.sockets.on('connection', function (socket) {
             motorLBackward,
             breakmotor;
         
-// =================  MOBILE BASE MOVEMENT =====================================        
+        // =================  ROBOT MOVEMENT =====================================        
         // Control mode choice
         if(control_md=="polar"){
 
-            // POLAR MODE
+            // ======= POLAR MODE ========
             var R=0,
                 L=0;
             //  Passage en coordonnées Polaires
@@ -194,7 +193,8 @@ io.sockets.on('connection', function (socket) {
             };
         }else if(control_md == "tank"){
 
-            // TANK MODE
+            // ======= TANK MODE ========
+
             var V=(200-Math.abs(DXL))*(DYL/200)+DYL;
             var W=(200-Math.abs(DYL))*(DXL/200)+DXL;
             var R= parseInt((V+W)/2);

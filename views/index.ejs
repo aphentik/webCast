@@ -84,8 +84,6 @@
 
         // Right Stick coordinates
         if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
-
-
         }else {
 
           socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
