@@ -63,15 +63,17 @@
 
       // INTERVAL EVENT
       setInterval(function(){
+
+        //Left Stick coordinates
         // If previous value is 0,0
         if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
 
         }else{
           // Accelerometer mode ?
           if(acc==true){
-            socket.emit('coordinate',{DXL: valY, DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+            socket.emit('coordinateRob',{DXL: valY, DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
           }else{
-            socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+            socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
           }
           if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
             previousIsZero=true;
@@ -79,6 +81,16 @@
             previousIsZero=false; 
           }
         }
+
+        // Right Stick coordinates
+        if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
+
+
+        }else {
+
+          socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
+
+        }  
       }, interval *1000);
       
     </script> 

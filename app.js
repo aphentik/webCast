@@ -85,8 +85,41 @@ app.post('/editsettings', function(req,res){
 io.sockets.on('connection', function (socket) {
     console.log('New client connected: '+ socket.handshake.address);
 
+
+    socket.on('coordinateCam', function(data){ 
+        var DXR = data.DXR;
+        var DYR = data.DYR;
+
+        // =================== CAMERA MOVEMENT ===============================================
+        var speedYaw,
+            speedPitch,
+            angleConfiguration;
+
+        if (DXR == 0 && DYR == 0) 
+            {
+                speedPitch = 0;
+                speedYaw = 0;
+            } else{
+                speedYaw    = parseInt(3*DXR/5);
+                speedPitch  = parseInt(3*DYR/5);
+                if (DXR<0 && DYR<0) {
+                    angleConfiguration = 1;
+                }else if (DXR>0 && DYR<0) {
+                    angleConfiguration = 2;
+                }else if (DXR<0 && DYR>0) {
+                    angleConfiguration = 3;
+                }else if (DXR>0 && DYR>0) {
+                    angleConfiguration = 4;
+                }
+            };
+
+        // Sending command via i2c
+        TRex.writeBytes(0x0E, [angleConfiguration, speedPitch, speedYaw], function(err) { if(err){console.log("i2c Error: "+ err);} });       
+
+    });
+
     // Quand le serveur reçoit un signal de type "Coordinate" du client    
-    socket.on('coordinate', function(data){
+    socket.on('coordinateRob', function(data){
         // Récupération des coordonnées 
         var DXL = data.DXL;
         var DYL = data.DYL;
@@ -189,32 +222,8 @@ io.sockets.on('connection', function (socket) {
         }
         breakmotor = 0;
         //console.log('L : '+L+ ' R :'+R+' radius : '+ radius + ' theta: '+ theta + ' LF='+ motorLForward +' LB='+motorLBackward+' RF='+ motorRForward+' RB='+motorRBackward);
-
-// =================== CAMERA MOVEMENT ===============================================
-var speedYaw,
-    speedPitch,
-    angleConfiguration;
-
-if (DXR == 0 && DYR == 0) 
-    {
-        speedPitch = speedYaw = 0;
-    } else{
-        speedYaw    = parseInt(3*DXR/5);
-        speedPitch  = parseInt(3*DYR/5);
-        if (DXR<0 && DYR<0) {
-            angleConfiguration = 1;
-        }else if (DXR>0 && DYR<0) {
-            angleConfiguration = 2;
-        }else if (DXR<0 && DYR>0) {
-            angleConfiguration = 3;
-        }else if (DXR>0 && DYR>0) {
-            angleConfiguration = 4;
-        }
-    };
-
-        // Sending command via i2c
-        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor,angleConfiguration, speedPitch, speedYaw], function(err) { if(err){console.log("i2c Error: "+ err);} });       
-
+        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });
+        //TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor,angleConfiguration, speedPitch, speedYaw], function(err) { if(err){console.log("i2c Error: "+ err);} });       
     });
 });
 
