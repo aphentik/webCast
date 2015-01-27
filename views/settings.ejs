@@ -66,6 +66,11 @@
 						<input type="radio" id="joyControl" name="acc_camera_mode" value="true" <% if(acc_mode == "true") {%> checked <% } %> >Accelerometer
 						<input type="radio" id="accControl" name="acc_camera_mode" value="false" <% if(acc_mode == "false") {%> checked <% } %> >Joystick
 					</fieldset>
+					<fieldset>
+						<legend>Profile selection :</legend>
+						<input type="checkbox" id="driver" name="userSelection" value="true" <% if(driver == "true") {%> checked <% } %> >Driver
+						<input type="radio" id="cameraman" name="userSelection" value="false" <% if(cameraman == "false") {%> checked <% } %> >Cameraman
+					</fieldset>
 					<iframe src="http://192.168.10.1:8080/panel" width="600" height="800"></iframe>
 					<input type="submit" value="Submit">
 				</form> 

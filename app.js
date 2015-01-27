@@ -31,6 +31,8 @@ nconf.load(function (err) {
 });
 var control_md=nconf.get('control_mode');
 var acc_md=nconf.get('acc_mode');
+var driver=nconf.get('driver');
+var cameraman= nconf.get('cameraman');
 
 // Socket.io loading
 var io = require('socket.io').listen(server);
@@ -44,7 +46,9 @@ app.get('/', function(req, res) {
 
     res.render('index.ejs',{ 
     control_mode: control_md,
-    acc_mode: acc_md
+    acc_mode: acc_md,
+    driver: driver,
+    cameraman: cameraman
   }); 
 });
 
@@ -56,7 +60,9 @@ app.get('/settings', function(req, res) {
     var acc_md=nconf.get('acc_mode');
     res.render('settings.ejs',{ 
         control_mode: control_md,
-        acc_mode: acc_md
+        acc_mode: acc_md,
+        driver: driver,
+        cameraman: cameraman
   }); 
 });
 // ---> editsettings (post method)
@@ -66,8 +72,12 @@ app.post('/editsettings', function(req,res){
     acc_md= req.body.acc_camera_mode;
     nconf.set('acc_mode', acc_md);
     nconf.set('control_mode', control_md);
+    nconf.set('driver', driver);
+    nconf.set('cameraman', cameraman);
     console.log('Controle mode: '+control_md);
-    console.log('Accelerometer camea control: '+acc_md);
+    console.log('Accelerometer camera control: '+acc_md);
+    console.log('driver: '+ driver);
+    console.log('cameraman: '+ cameraman);
     //save settings
     nconf.save(function (err) {
         if (err) {

@@ -28,6 +28,8 @@
       var previousIsZero = true;
       var control_mode = '<%= control_mode %>';
       var acc = <%= acc_mode %>;
+      var driver= <%= driver %>;
+      var cameraman= <%= cameraman %>;
 
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');

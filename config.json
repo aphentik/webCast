@@ -1,4 +1,6 @@
 {
   "acc_mode": "true",
-  "control_mode": "tank"
+  "control_mode": "tank",
+  "driver": "true",
+  "cameraman": "true"
 }
