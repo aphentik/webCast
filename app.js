@@ -22,27 +22,24 @@ var offset = 0;
 var coeff=1;
 // Set "Public" as root folder for static content
 app.use(express.static(__dirname + '/public'));
-//Load settings 
-nconf.load(function (err) {
-    if (err) {
-      console.error(err.message);
-      return;
-    };
-    console.log('Configuration loaded successfully.');
-});
-
 
 // Socket.io loading
 var io = require('socket.io').listen(server);
 
-
 // Use sessions
 app.use(session({secret: 'castweb'}))
-
 
 // If there is no settings instance we create it 
 .use(function(req, res, next){
     if (typeof(req.session.control_md) == 'undefined' || typeof(req.session.acc_mode) == 'undefined' || typeof(req.session.driver) == 'undefined' || typeof(req.session.cameraman) == 'undefined') {
+        //Load settings 
+        nconf.load(function (err) {
+            if (err) {
+              console.error(err.message);
+              return;
+            };
+            console.log('Configuration loaded successfully.');
+        });
         req.session.control_md = nconf.get('control_mode');
         req.session.acc_mode = nconf.get('acc_mode');
         req.session.driver = nconf.get('driver');
@@ -80,17 +77,16 @@ app.get('/settings', function(req, res) {
         cameraman: req.session.cameraman
   }); 
 });
+
 // ---> editsettings (post method)
 app.post('/editsettings', function(req,res){
 
+    // Put variables from post method on session variable
     req.session.control_md= req.body.control_mode;
     req.session.acc_mode= req.body.acc_camera_mode;
     req.session.driver= req.body.userSelectionDriver;
     req.session.cameraman= req.body.userSelectionCameraman;
-    // nconf.set('acc_mode', acc_md);
-    // nconf.set('control_mode', control_md);
-    // nconf.set('driver', driver);
-    // nconf.set('cameraman', cameraman);
+
 
     console.log('Controle mode: '+req.session.control_md);
     console.log('Accelerometer camera control: '+ req.session.acc_mode);
@@ -101,11 +97,11 @@ app.post('/editsettings', function(req,res){
 
 
 // =================== SOCKET.IO ===================================================
-// Lors de la connection d'un client 
+// On client connexion 
 io.sockets.on('connection', function (socket) {
     console.log('New client connected: '+ socket.handshake.address);
 
-    // Quand le serveur reçoit un signal de type "CoordinateCam" du client (envoi des commandes pour la basecam venant du stick droit) 
+    // When server receive "CoordinateCam" data from client (Rigth stick data) :
     socket.on('coordinateCam', function(data){ 
         var DXR = data.DXR;
         var DYR = data.DYR;
@@ -134,18 +130,15 @@ io.sockets.on('connection', function (socket) {
             };
 
         // Sending command via i2c
-        //TRex.writeBytes(0x0E, [angleConfiguration, speedPitch, speedYaw], function(err) { if(err){console.log("i2c Error: "+ err);} });       
+        TRex.writeBytes(0x0E, [angleConfiguration, speedPitch, speedYaw], function(err) { if(err){console.log("i2c Error: "+ err);} });       
     });
 
-    // Quand le serveur reçoit un signal de type "CoordinateRob" du client (envoi des commandes pour le robot venant du stick gauche) 
+    // When server receive "CoordinateRob" data from client (left stick data) : 
     socket.on('coordinateRob', function(data){
         // Récupération des coordonnées 
         var DXL = data.DXL;
         var DYL = data.DYL;
-        //console.log('LEFT Coordinate: X = ' + DXL + '; Y = '+DYL);
-        //console.log('RIGHT Coordinate: X = ' + DXR + '; Y = '+DYR);
-
-        // Wild Thumper control code
+        // Thumper algorithm variables
         var motorRForward,
             motorRBackward,
             motorLForward,
@@ -239,8 +232,9 @@ io.sockets.on('connection', function (socket) {
             };
         }
         breakmotor = 0;
+
         //console.log('L : '+L+ ' R :'+R+' radius : '+ radius + ' theta: '+ theta + ' LF='+ motorLForward +' LB='+motorLBackward+' RF='+ motorRForward+' RB='+motorRBackward);
-        //TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });
+        TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor], function(err) { if(err){console.log("i2c Error: "+ err);} });
         //TRex.writeBytes(0x0F, [motorLForward, motorLBackward,motorRForward,motorRBackward,breakmotor,angleConfiguration, speedPitch, speedYaw], function(err) { if(err){console.log("i2c Error: "+ err);} });       
     });
 });
