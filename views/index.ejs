@@ -30,30 +30,34 @@
       var acc = <%= acc_mode %>;
       var driver= <%= driver %>;
       var cameraman= <%= cameraman %>;
-
+      console.log(cameraman);
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');
 
       //LEFT Stick
-      var joystickL = new VirtualJoystick({
-        container : document.getElementById('stick1'),
-        strokeStyle : 'cyan',
-        mouseSupport  : true,
-        limitStickTravel: true,
-//      stationaryBase:true,
-//      baseX   : 200,
-//      baseY   : 200,
-        stickRadius : 200
-      });
+      if(driver=='true'){
+        var joystickL = new VirtualJoystick({
+          container : document.getElementById('stick1'),
+          strokeStyle : 'cyan',
+          mouseSupport  : true,
+          limitStickTravel: true,
+  //      stationaryBase:true,
+  //      baseX   : 200,
+  //      baseY   : 200,
+          stickRadius : 200
+        });
+      };
           
       // RIGHT Stick
-      var joystickR = new VirtualJoystick({
-        container : document.getElementById('stick2'),
-        strokeStyle : 'orange',
-        mouseSupport  : true,
-        limitStickTravel: true,
-        stickRadius : 200
-      });
+      if (cameraman =='true') {
+        var joystickR = new VirtualJoystick({
+          container : document.getElementById('stick2'),
+          strokeStyle : 'orange',
+          mouseSupport  : true,
+          limitStickTravel: true,
+          stickRadius : 200
+        });
+      };
  
       //Accelerometer initialisation
       gyro.frequency = 100;
@@ -67,31 +71,35 @@
       setInterval(function(){
 
         //Left Stick coordinates
-        // If previous value is 0,0
-        if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
+        if (driver == 'true') {
+          // If previous value is 0,0
+          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
 
-        }else{
-          // Accelerometer mode ?
-          if(acc==true){
-            socket.emit('coordinateRob',{DXL: valY, DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
           }else{
-            socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
+              socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY() });
+            if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
+              previousIsZero=true;
+            }else {
+              previousIsZero=false; 
+            }
           }
-          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
-            previousIsZero=true;
-          }else {
-            previousIsZero=false; 
-          }
-        }
+        };
 
         // Right Stick coordinates
-        if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
-        }else {
+        if (cameraman == 'true') {
+          if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
+          }else {
 
-          socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
-
-        }  
+            // Accelerometer mode ?
+            if(acc==true){
+              socket.emit('coordinateCam',{DXR: valX ,DYR: valY});
+            }else{
+              socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
+            }
+          }  
+        };
       }, interval *1000);
+      
       
     </script> 
 </html>

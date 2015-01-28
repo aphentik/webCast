@@ -55,7 +55,7 @@
 		</div>
 		<div id="content-container">
 			<div id="content">
-				<form action="/editsettings" method="POST">
+				<form name="myForm" onsubmit="return validateForm()" action="/editsettings" method="POST">
 					<fieldset>
 						<legend>Driving Control mode:</legend>
 						<input type="radio" id="tankControl" name="control_mode" value="tank" <% if(control_mode == "tank") {%> checked <% } %> >Tank
@@ -68,13 +68,27 @@
 					</fieldset>
 					<fieldset>
 						<legend>Profile selection :</legend>
-						<input type="checkbox" id="driver" name="userSelection" value="true" <% if(driver == "true") {%> checked <% } %> >Driver
-						<input type="radio" id="cameraman" name="userSelection" value="false" <% if(cameraman == "false") {%> checked <% } %> >Cameraman
+						<input id='driverh'  type='hidden' value='false' name='userSelectionDriver'>
+						<input type="checkbox" id="driver" name="userSelectionDriver" value="true" <% if(driver == "true") {%> checked <% } %> >Cast Driver
+						<input id='cameramanh'  type='hidden' value='false' name='userSelectionCameraman'>
+						<input type="checkbox" id="cameraman" name="userSelectionCameraman" value="true" <% if(cameraman == "true") {%> checked <% } %> >Cameraman
 					</fieldset>
 					<iframe src="http://192.168.10.1:8080/panel" width="600" height="800"></iframe>
 					<input type="submit" value="Submit">
 				</form> 
 			</div>
+			<script type="text/javascript">
+				function validateForm(){
+
+    				if (document.getElementById('driver').checked) {
+        				document.getElementById('driverh').disabled = true;
+   					};
+   					if (document.getElementById('cameraman').checked) {
+   						document.getElementById('cameramanh').disabled = true;
+   					};
+   					return true;
+				}
+			</script>
 			<div id="footer">
 				Copyright © webCast 2015
 			</div>
