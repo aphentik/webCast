@@ -56,6 +56,7 @@
 		<div id="content-container">
 			<div id="content">
 				<form name="myForm" onsubmit="return validateForm()" action="/editsettings" method="POST">
+					<input type="submit" value="Submit">
 					<fieldset>
 						<legend>Driving Control mode:</legend>
 						<input type="radio" id="tankControl" name="control_mode" value="tank" <% if(control_mode == "tank") {%> checked <% } %> >Tank
