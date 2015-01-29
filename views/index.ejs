@@ -30,11 +30,11 @@
       var acc = <%= acc_mode %>;
       var driver= <%= driver %>;
       var cameraman= <%= cameraman %>;
-      console.log(cameraman);
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');
 
       //LEFT Stick
+      console.log('driver' + driver);
       if(driver == "true"){
         var joystickL = new VirtualJoystick({
           container : document.getElementById('stick1'),
@@ -49,6 +49,7 @@
       };
           
       // RIGHT Stick
+      console.log('cameraman' + cameraman);
       if (cameraman =="true") {
         var joystickR = new VirtualJoystick({
           container : document.getElementById('stick2'),
@@ -71,6 +72,7 @@
       setInterval(function(){
 
         //Left Stick coordinates
+        console.log('driver2' + driver);
         if (driver == "true") {
           // If previous value is 0,0
           if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
@@ -86,6 +88,7 @@
         };
 
         // Right Stick coordinates
+        onsole.log('cameraman 2' + cameraman);
         if (cameraman =="true") {
           if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
           }else {
