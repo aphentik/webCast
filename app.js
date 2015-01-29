@@ -29,6 +29,7 @@ var io = require('socket.io').listen(server);
 // Use sessions
 app.use(session({secret: 'castweb'}))
 
+
 // If there is no settings instance we create it 
 .use(function(req, res, next){
     if (typeof(req.session.control_md) == 'undefined' || typeof(req.session.acc_mode) == 'undefined' || typeof(req.session.driver) == 'undefined' || typeof(req.session.cameraman) == 'undefined') {
@@ -40,6 +41,7 @@ app.use(session({secret: 'castweb'}))
             };
             console.log('Configuration loaded successfully.');
         });
+
         req.session.control_md = nconf.get('control_mode');
         req.session.acc_mode = nconf.get('acc_mode');
         req.session.driver = nconf.get('driver');
@@ -144,6 +146,7 @@ io.sockets.on('connection', function (socket) {
             motorLForward,
             motorLBackward,
             breakmotor;
+        var control_md=req.session.control_md ;
         
         // =================  ROBOT MOVEMENT =====================================        
         // Control mode choice
@@ -230,7 +233,7 @@ io.sockets.on('connection', function (socket) {
                 motorLForward = 0;
                 motorLBackward = 0;
             };
-            
+
         }
         breakmotor = 0;
 
