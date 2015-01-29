@@ -35,7 +35,7 @@
 
       //LEFT Stick
       console.log('driver' + driver);
-      if(driver == "true"){
+      if(driver == true){
         var joystickL = new VirtualJoystick({
           container : document.getElementById('stick1'),
           strokeStyle : 'cyan',
@@ -50,7 +50,7 @@
           
       // RIGHT Stick
       console.log('cameraman' + cameraman);
-      if (cameraman =="true") {
+      if (cameraman == true) {
         var joystickR = new VirtualJoystick({
           container : document.getElementById('stick2'),
           strokeStyle : 'orange',
@@ -73,7 +73,7 @@
 
         //Left Stick coordinates
         console.log('driver2' + driver);
-        if (driver == "true") {
+        if (driver == true) {
           // If previous value is 0,0
           if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
 
@@ -89,7 +89,7 @@
 
         // Right Stick coordinates
         console.log('cameraman 2' + cameraman);
-        if (cameraman =="true") {
+        if (cameraman ==true) {
           if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
           }else {
 
