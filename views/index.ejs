@@ -35,7 +35,7 @@
       var socket = io.connect('http://192.168.10.1:3000');
 
       //LEFT Stick
-      if(driver=='true'){
+      if(true){
         var joystickL = new VirtualJoystick({
           container : document.getElementById('stick1'),
           strokeStyle : 'cyan',
@@ -49,7 +49,7 @@
       };
           
       // RIGHT Stick
-      if (cameraman =='true') {
+      if (true) {
         var joystickR = new VirtualJoystick({
           container : document.getElementById('stick2'),
           strokeStyle : 'orange',
@@ -71,7 +71,7 @@
       setInterval(function(){
 
         //Left Stick coordinates
-        if (driver == 'true') {
+        if (true) {
           // If previous value is 0,0
           if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
 
@@ -86,7 +86,7 @@
         };
 
         // Right Stick coordinates
-        if (cameraman == 'true') {
+        if (true) {
           if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
           }else {
 
