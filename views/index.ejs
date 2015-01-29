@@ -76,7 +76,7 @@
           if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
 
           }else{
-              socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY() });
+              socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), control_md: control_mode });
             if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
               previousIsZero=true;
             }else {

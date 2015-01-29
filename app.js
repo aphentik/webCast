@@ -146,7 +146,7 @@ io.sockets.on('connection', function (socket) {
             motorLForward,
             motorLBackward,
             breakmotor;
-        var control_md=req.session.control_md ;
+        var control_md=data.control_md;
         
         // =================  ROBOT MOVEMENT =====================================        
         // Control mode choice
