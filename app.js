@@ -246,7 +246,7 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-Read Battery Level 
+//Read Battery Level 
 setInterval(function(){
     TRex.readByte(function(err, res) {
         //result contains a buffer of bytes
