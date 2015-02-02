@@ -74,7 +74,7 @@ app.get('/', function(req, res) {
         };   
         //battery= res/10;
         console.log('Batterie : ' + res);  //"Read battery result:"+ 
-        battery=res;  
+        battery=res/10;  
     }); 
     
     res.render('index.ejs',{ 
