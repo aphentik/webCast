@@ -74,7 +74,7 @@
       // INTERVAL EVENT
       setInterval(function(){
 
-        slider= document.getElementById("mySlider").value;
+        slider= document.getElementById("mySlider").value * -1;
         if (slider!=0){
 
           socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: slider, control_md: control_mode });

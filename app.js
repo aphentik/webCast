@@ -255,7 +255,7 @@ setInterval(function(){
         };   
         console.log('Batterie : ' + res);  //"Read battery result:"+ 
     }); 
-}, 1 *1000);
+}, 10 *1000);
 
 console.log('Server Listening on port '+port);
 console.log('Cast Control Interface: http://192.168.10.1:3000');
