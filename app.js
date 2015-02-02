@@ -182,13 +182,13 @@ io.sockets.on('connection', function (socket) {
             }
 
             if(R>0){
-              R=parseInt(-719/70200000000*Math.pow(R,5)+9163/1755000000*Math.pow(R,4)-124421/140400000*Math.pow(R,3)+2666/43875*Math.pow(R,2)-3797/4680*R);
-            //R=parseInt(1/75000*Math.pow(R,3)+1/500*Math.pow(R,2)+1/15*R);
+                //R=parseInt(-719/70200000000*Math.pow(R,5)+9163/1755000000*Math.pow(R,4)-124421/140400000*Math.pow(R,3)+2666/43875*Math.pow(R,2)-3797/4680*R);
+                R=parseInt(1/75000*Math.pow(R,3)+1/500*Math.pow(R,2)+1/15*R);
                 motorRForward = R *coeff +offset;
                 motorRBackward = 0;
             }else if(R<0){
-                R=-parseInt(-719/70200000000*Math.pow(-R,5)+9163/1755000000*Math.pow(-R,4)-124421/140400000*Math.pow(-R,3)+2666/43875*Math.pow(-R,2)-3797/4680*-R);
-                // R=-parseInt(1/75000*Math.pow(-R,3)+1/500*Math.pow(-R,2)+1/15*-R)
+                //R=-parseInt(-719/70200000000*Math.pow(-R,5)+9163/1755000000*Math.pow(-R,4)-124421/140400000*Math.pow(-R,3)+2666/43875*Math.pow(-R,2)-3797/4680*-R);
+                R=-parseInt(1/75000*Math.pow(-R,3)+1/500*Math.pow(-R,2)+1/15*-R)
                 motorRBackward = -(R *coeff)+ offset;
                 motorRForward = 0;
             }else{
@@ -196,13 +196,13 @@ io.sockets.on('connection', function (socket) {
                 motorRBackward = 0;
             }  
             if(L>0){
-                L=parseInt(-719/70200000000*Math.pow(L,5)+9163/1755000000*Math.pow(L,4)-124421/140400000*Math.pow(L,3)+2666/43875*Math.pow(L,2)-3797/4680*L);
-            // L=parseInt(1/75000*Math.pow(L,3)+1/500*Math.pow(L,2)+1/15*L)
+                //L=parseInt(-719/70200000000*Math.pow(L,5)+9163/1755000000*Math.pow(L,4)-124421/140400000*Math.pow(L,3)+2666/43875*Math.pow(L,2)-3797/4680*L);
+                L=parseInt(1/75000*Math.pow(L,3)+1/500*Math.pow(L,2)+1/15*L)
                 motorLForward = L *coeff + offset;
                 motorLBackward = 0;
             }else if(L<0) {
-                 L=-parseInt(-719/70200000000*Math.pow(-L,5)+9163/1755000000*Math.pow(-L,4)-124421/140400000*Math.pow(-L,3)+2666/43875*Math.pow(-L,2)-3797/4680*-L);
-            // L=-parseInt(1/75000*Math.pow(-L,3)+1/500*Math.pow(-L,2)+1/15*-L)            
+                //L=-parseInt(-719/70200000000*Math.pow(-L,5)+9163/1755000000*Math.pow(-L,4)-124421/140400000*Math.pow(-L,3)+2666/43875*Math.pow(-L,2)-3797/4680*-L);
+                L=-parseInt(1/75000*Math.pow(-L,3)+1/500*Math.pow(-L,2)+1/15*-L)            
                 motorLBackward = -L*coeff+ offset;
                 motorLForward = 0;
             }else{
@@ -237,7 +237,6 @@ io.sockets.on('connection', function (socket) {
                 motorLForward = 0;
                 motorLBackward = 0;
             };
-
         }
         breakmotor = 0;
 
@@ -247,16 +246,16 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-// Read Battery Level 
-// setInterval(function(){
-//     TRex.readBytes(0x0F, 2, function(err, res) {
-         // result contains a buffer of bytes
-//         if(err){
-//             console.log("i2c Read battery Error: "+ err);
-//         };   
-//         console.log(res);  //"Read battery result:"+ 
-//     }); 
-// }, 10 *1000);
+Read Battery Level 
+setInterval(function(){
+    TRex.readByte(function(err, res) {
+        //result contains a buffer of bytes
+        if(err){
+            console.log("i2c Read battery Error: "+ err);
+        };   
+        console.log('Batterie : ' res);  //"Read battery result:"+ 
+    }); 
+}, 1 *1000);
 
 console.log('Server Listening on port '+port);
 console.log('Cast Control Interface: http://192.168.10.1:3000');

@@ -113,6 +113,20 @@
           };
         }
       }, interval *1000);
+
+      function show() {
+        //on récupère l'élément qui a l'identifiant donné en paramètre
+        var toShow = document.getElementById('lien-qui-saffiche-au-passage-de-la-souris');
+        //on change la valeur du style css en visible
+        toShow.style.visibility = 'visible';
+      }
+    
+      function hide() {
+        //on récupère l'élément qui a l'identifiant donné en paramètre
+        var toHide = document.getElementById('lien-qui-saffiche-au-passage-de-la-souris');
+        //on change la valeur du style css en visible
+        toHide.style.visibility = 'hidden';
+      }
       
       
     </script> 
