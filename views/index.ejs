@@ -12,6 +12,31 @@
         <div id="slider">
           <input id ="mySlider" type="range" value="0" max="200" min="0" step="20">
         </div>
+        <div id="battery">
+          <img <% 
+                  if(battery >=7.9) {
+                %> 
+                  src="img/battery_4_4.svg" 
+               <%
+                  } else if(battery >= 7.3 && battery < 7.9) {
+                %>
+                  src="img/battery_3_4.svg"
+                <%
+                  } else if(battery >= 6.6 && battery < 7.3) {
+                %>
+                  src="img/battery_2_4.svg"
+                <%
+                  } else if(battery >= 6.5 && battery < 6.6) {
+                %>
+                  src="img/battery_1_4.svg"
+                <%
+                  } else if(battery < 6.5) {%>
+                  src="img/battery_0_4.svg"
+                <%
+                  }
+                %>
+          >
+        </div>
         <span id="example"></span>
         <img id="videofeed" src="http://192.168.10.1:8080/stream/video.mjpeg" alt="If you see this message check the availability of video stream">
         <div id="sticksContainer">
@@ -114,9 +139,9 @@
         }
       }, interval *1000);
 
-      function show() {
+      function clickSlide() {
         //on récupère l'élément qui a l'identifiant donné en paramètre
-        var toShow = document.getElementById('lien-qui-saffiche-au-passage-de-la-souris');
+        var toShow = document.getElementById('mySlider');
         //on change la valeur du style css en visible
         toShow.style.visibility = 'visible';
       }

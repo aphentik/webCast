@@ -40,13 +40,25 @@
 #slider {
   opacity: 0.4;
   float: left;
-  width: 7%;
-  height: 15%;
+  width: 100px;
+  height: 100px;
   margin: auto;
   z-index: 3;
   position: relative;
   margin-top: 40px;
   margin-left: 30px;
+}
+
+#battery {
+  opacity: 0.4;
+  float: right;
+  width: 7%;
+  height: 15%;
+  margin-bottom: 10px;
+  z-index: 3;
+  position: absolute;
+  bottom: 0;
+  right: 10px;
 }
 
 

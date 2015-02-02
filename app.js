@@ -13,6 +13,8 @@ var bodyParser = require('body-parser');
 var port= 3000;
 var server = app.listen(port);
 var exec = require('child_process').exec;
+var average = require('average');
+
 // i2C variables
 var i2c = require('i2c');
 var address = 0x07;
@@ -23,11 +25,16 @@ var coeff=1;
 // Set "Public" as root folder for static content
 app.use(express.static(__dirname + '/public'));
 
+var avgBat =[];
+var battery = 0.0;
+
 // Socket.io loading
 var io = require('socket.io').listen(server);
 
 // Use sessions
 app.use(session({secret: 'castweb'}))
+
+
 
 
 // If there is no settings instance we create it 
@@ -60,11 +67,22 @@ app.use(session({secret: 'castweb'}))
 app.get('/', function(req, res) {
     //res.writeHead(200, {'Content-Type': 'text/html'});
 
+    TRex.readByte(function(err, res) {
+        //result contains a buffer of bytes
+        if(err){
+            console.log("i2c Read battery Error: "+ err);
+        };   
+        //battery= res/10;
+        console.log('Batterie : ' + res);  //"Read battery result:"+ 
+        battery=res;  
+    }); 
+    
     res.render('index.ejs',{ 
     control_mode: req.session.control_md,
     acc_mode: req.session.acc_mode,
     driver: req.session.driver,
-    cameraman: req.session.cameraman
+    cameraman: req.session.cameraman,
+    battery : battery
   }); 
 });
 
@@ -246,16 +264,27 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-//Read Battery Level 
-setInterval(function(){
-    TRex.readByte(function(err, res) {
-        //result contains a buffer of bytes
-        if(err){
-            console.log("i2c Read battery Error: "+ err);
-        };   
-        console.log('Batterie : ' + res);  //"Read battery result:"+ 
-    }); 
-}, 10 *1000);
+// //Read Battery Level 
+// setInterval(function(){
+//     TRex.readByte(function(err, res) {
+//         //result contains a buffer of bytes
+//         if(err){
+//             console.log("i2c Read battery Error: "+ err);
+//         };   
+//         //battery= res/10;
+//         console.log('Batterie : ' + res);  //"Read battery result:"+ 
+
+
+//         avgBat.push(res);
+//         if (avgBat.length >5){
+//             avgBat.shift;
+//             var result = average(avgBat);
+//             console.log(result);
+//         }
+        
+//     }); 
+//     )
+//  }, 10 *1000);
 
 console.log('Server Listening on port '+port);
 console.log('Cast Control Interface: http://192.168.10.1:3000');
