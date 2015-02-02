@@ -253,7 +253,7 @@ setInterval(function(){
         if(err){
             console.log("i2c Read battery Error: "+ err);
         };   
-        console.log('Batterie : ' res);  //"Read battery result:"+ 
+        console.log('Batterie : ' + res);  //"Read battery result:"+ 
     }); 
 }, 1 *1000);
 
