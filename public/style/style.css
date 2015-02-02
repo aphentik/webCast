@@ -37,3 +37,14 @@
   position: relative;
 }
 
+#slider {
+  opacity: 0.4;
+  float: left;
+  width: 7%;
+  height: 15%;
+  margin: auto;
+  z-index: 3;
+  position: relative;
+}
+
+
