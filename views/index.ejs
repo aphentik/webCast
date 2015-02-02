@@ -9,6 +9,9 @@
         <div id="settings">
           <a href="/settings"><img src="img/tools.png"></a>
         </div>
+        <div id="slider">
+          <input id ="mySlider" type="range" value="15" max="200" min="0" step="20">
+        </div>
         <span id="example"></span>
         <img id="videofeed" src="http://192.168.10.1:8080/stream/video.mjpeg" alt="If you see this message check the availability of video stream">
         <div id="sticksContainer">
@@ -71,36 +74,44 @@
       // INTERVAL EVENT
       setInterval(function(){
 
-        //Left Stick coordinates
-        console.log('driver2' + driver);
-        if (driver == true) {
-          // If previous value is 0,0
-          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
+        slider= document.getElementById("mySlider").value;
+        if (slider!=0){
 
-          }else{
-              socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), control_md: control_mode });
-            if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
-              previousIsZero=true;
-            }else {
-              previousIsZero=false; 
-            }
-          }
-        };
+          socket.emit('coordinateRob',{DXL: slider,DYL: joystickL.deltaY(), control_md: control_mode });
 
-        // Right Stick coordinates
-        console.log('cameraman 2' + cameraman);
-        if (cameraman ==true) {
-          if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
-          }else {
+        }else{
 
-            // Accelerometer mode ?
-            if(acc==true){
-              socket.emit('coordinateCam',{DXR: valX ,DYR: valY});
+          //Left Stick coordinates
+          console.log('driver2' + driver);
+          if (driver == true) {
+            // If previous value is 0,0
+            if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
+
             }else{
-              socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
+                socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), control_md: control_mode });
+              if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
+                previousIsZero=true;
+              }else {
+                previousIsZero=false; 
+              }
             }
-          }  
-        };
+          };
+
+          // Right Stick coordinates
+          console.log('cameraman 2' + cameraman);
+          if (cameraman ==true) {
+            if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
+            }else {
+
+              // Accelerometer mode ?
+              if(acc==true){
+                socket.emit('coordinateCam',{DXR: valX ,DYR: valY});
+              }else{
+                socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
+              }
+            }  
+          };
+        }
       }, interval *1000);
       
       
