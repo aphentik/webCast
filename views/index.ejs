@@ -77,7 +77,7 @@
         slider= document.getElementById("mySlider").value;
         if (slider!=0){
 
-          socket.emit('coordinateRob',{DXL: slider,DYL: joystickL.deltaY(), control_md: control_mode });
+          socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: slider, control_md: control_mode });
 
         }else{
 
