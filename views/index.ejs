@@ -11,7 +11,7 @@
         </div>
         <div id="slider">
           <button id="hideshow" onclick="hideshow()"><img src="img/slider.svg"></button>
-          <input id ="mySlider" type="range" value="0" max="200" min="0" step="10" visibility="hidden" >
+          <input id ="mySlider" type="range" value="0" max="200" min="0" step="10" style="display: none" >
         </div>
         <div id="battery">
           <img <% 
@@ -99,11 +99,13 @@
       setInterval(function(){
 
         slider= document.getElementById("mySlider").value * -1;
-        if (slider!=0){
+        if (slider!=0 && previousSldIsZero !=true){
 
           socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: slider, control_md: control_mode });
+          previousSldIsZero=false;
 
         }else{
+          previousSldIsZero=true;
 
           //Left Stick coordinates
           if (driver == true) {
