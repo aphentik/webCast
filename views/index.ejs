@@ -10,6 +10,7 @@
           <a href="/settings"><img src="img/tools.png"></a>
         </div>
         <div id="slider">
+          <button id="hideshow" ><img src="img/slider.svg"></button>
           <input id ="mySlider" type="range" value="0" max="200" min="0" step="20">
         </div>
         <div id="battery">
@@ -138,21 +139,18 @@
           };
         }
       }, interval *1000);
-
-      function clickSlide() {
-        //on récupère l'élément qui a l'identifiant donné en paramètre
-        var toShow = document.getElementById('mySlider');
-        //on change la valeur du style css en visible
-        toShow.style.visibility = 'visible';
-      }
-    
-      function hide() {
-        //on récupère l'élément qui a l'identifiant donné en paramètre
-        var toHide = document.getElementById('lien-qui-saffiche-au-passage-de-la-souris');
-        //on change la valeur du style css en visible
-        toHide.style.visibility = 'hidden';
-      }
       
+      var button = document.getElementById('hideshow'); // Assumes element with id='button'
+
+      button.onclick = function() {
+          var slide = document.getElementById('mySlide');
+          if (slide.style.visibility !== 'hidden') {
+              slide.style.visibility = 'hidden';
+          }
+          else {
+              slide.style.visibility = 'visible';
+          }
+      };
       
     </script> 
 </html>
