@@ -11,7 +11,7 @@
         </div>
         <div id="slider">
           <button id="hideshow" onclick="hideshow()"><img src="img/slider.svg"></button>
-          <input id ="mySlider" type="range" value="0" max="200" min="0" step="20">
+          <input id ="mySlider" type="range" value="0" max="200" min="0" step="10" visibility="hidden" >
         </div>
         <div id="battery">
           <img <% 
@@ -142,6 +142,8 @@
           var slide = document.getElementById('mySlider');
           if (slide.style.visibility !== 'hidden') {
               slide.style.visibility = 'hidden';
+              var input = document.getElementById("mySlider");
+              input.value = 0;
           }
           else {
               slide.style.visibility = 'visible';
