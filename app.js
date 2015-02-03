@@ -54,11 +54,6 @@ app.use(session({secret: 'castweb'}))
         req.session.driver = nconf.get('driver');
         req.session.cameraman = nconf.get('cameraman');
     }
-    console.log('control_md: '+ req.session.control_md );
-    console.log('acc: '+ req.session.acc_mode );
-    console.log('driver: '+ req.session.driver );
-    console.log('cameraman: '+ req.session.cameraman );
-
     next();
 })  
 
@@ -72,8 +67,6 @@ app.get('/', function(req, res) {
         if(err){
             console.log("i2c Read battery Error: "+ err);
         };   
-        //battery= res/10;
-        console.log('Batterie : ' + res);  //"Read battery result:"+ 
         battery=res/10;  
     }); 
     

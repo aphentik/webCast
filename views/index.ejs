@@ -10,7 +10,7 @@
           <a href="/settings"><img src="img/tools.png"></a>
         </div>
         <div id="slider">
-          <button id="hideshow" ><img src="img/slider.svg"></button>
+          <button id="hideshow" onclick="hideshow()"><img src="img/slider.svg"></button>
           <input id ="mySlider" type="range" value="0" max="200" min="0" step="20">
         </div>
         <div id="battery">
@@ -63,7 +63,6 @@
       var socket = io.connect('http://192.168.10.1:3000');
 
       //LEFT Stick
-      console.log('driver' + driver);
       if(driver == true){
         var joystickL = new VirtualJoystick({
           container : document.getElementById('stick1'),
@@ -78,7 +77,6 @@
       };
           
       // RIGHT Stick
-      console.log('cameraman' + cameraman);
       if (cameraman == true) {
         var joystickR = new VirtualJoystick({
           container : document.getElementById('stick2'),
@@ -108,7 +106,6 @@
         }else{
 
           //Left Stick coordinates
-          console.log('driver2' + driver);
           if (driver == true) {
             // If previous value is 0,0
             if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
@@ -124,7 +121,6 @@
           };
 
           // Right Stick coordinates
-          console.log('cameraman 2' + cameraman);
           if (cameraman ==true) {
             if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
             }else {
@@ -142,7 +138,7 @@
       
       var button = document.getElementById('hideshow'); // Assumes element with id='button'
 
-      button.onclick = function() {
+      function hideshow() {
           var slide = document.getElementById('mySlide');
           if (slide.style.visibility !== 'hidden') {
               slide.style.visibility = 'hidden';
