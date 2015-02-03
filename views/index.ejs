@@ -11,7 +11,7 @@
         </div>
         <div id="slider">
           <button id="hideshow" onclick="hideshow()"><img src="img/slider.svg"></button>
-          <input id ="mySlider" type="range" value="0" max="200" min="0" step="10" class="hidden" >
+          <input id ="mySlider" type="range" value="0" max="200" min="0" step="10" >
         </div>
         <div id="battery">
           <img <% 
@@ -61,6 +61,9 @@
       var cameraman= <%= cameraman %>;
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');
+      var slide = document.getElementById('mySlider');
+      slide.style.visibility = 'hidden';
+      var previousSldIsZero=true;
 
       //LEFT Stick
       if(driver == true){
@@ -99,13 +102,17 @@
       setInterval(function(){
 
         slider= document.getElementById("mySlider").value * -1;
-        if (slider!=0 && previousSldIsZero !=true){
-
+        if (slider!=0){
           socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: slider, control_md: control_mode });
-          previousSldIsZero=false;
-
+          if (previousSldIsZero ==true){
+            previousSldIsZero=false;
+          }else{
+            previousSldIsZero==false;
+          }
         }else{
-          previousSldIsZero=true;
+          if(previousSldIsZero==false){
+            previousSldIsZero=true;
+          }
 
           //Left Stick coordinates
           if (driver == true) {
@@ -141,7 +148,6 @@
       var button = document.getElementById('hideshow'); // Assumes element with id='button'
 
       function hideshow() {
-          var slide = document.getElementById('mySlider');
           if (slide.style.visibility !== 'hidden') {
               slide.style.visibility = 'hidden';
               var input = document.getElementById("mySlider");
