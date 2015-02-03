@@ -112,6 +112,7 @@
         }else{
           if(previousSldIsZero==false){
             previousSldIsZero=true;
+            socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: slider, control_md: control_mode });
           }
 
           //Left Stick coordinates
