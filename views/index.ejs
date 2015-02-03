@@ -9,6 +9,35 @@
         <div id="settings">
           <a href="/settings"><img src="img/tools.png"></a>
         </div>
+        <div id="slider">
+          <button id="hideshow" onclick="hideshow()"><img src="img/slider.svg"></button>
+          <input id ="mySlider" type="range" value="0" max="200" min="0" step="10" class="hidden" >
+        </div>
+        <div id="battery">
+          <img <% 
+                  if(battery >=7.9) {
+                %> 
+                  src="img/battery_4_4.svg" 
+               <%
+                  } else if(battery >= 7.3 && battery < 7.9) {
+                %>
+                  src="img/battery_3_4.svg"
+                <%
+                  } else if(battery >= 6.6 && battery < 7.3) {
+                %>
+                  src="img/battery_2_4.svg"
+                <%
+                  } else if(battery >= 6.5 && battery < 6.6) {
+                %>
+                  src="img/battery_1_4.svg"
+                <%
+                  } else if(battery < 6.5) {%>
+                  src="img/battery_0_4.svg"
+                <%
+                  }
+                %>
+          >
+        </div>
         <span id="example"></span>
         <img id="videofeed" src="http://192.168.10.1:8080/stream/video.mjpeg" alt="If you see this message check the availability of video stream">
         <div id="sticksContainer">
@@ -24,64 +53,104 @@
       //Define refresh interval (in seconds)
       var interval = 1/10;
       var valY=0;
+      var valX=0;
       var previousIsZero = true;
       var control_mode = '<%= control_mode %>';
       var acc = <%= acc_mode %>;
-
+      var driver= <%= driver %>;
+      var cameraman= <%= cameraman %>;
       console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');
 
       //LEFT Stick
-      var joystickL = new VirtualJoystick({
-        container : document.getElementById('stick1'),
-        strokeStyle : 'cyan',
-        mouseSupport  : true,
-        limitStickTravel: true,
-//      stationaryBase:true,
-//      baseX   : 200,
-//      baseY   : 200,
-        stickRadius : 200
-      });
+      if(driver == true){
+        var joystickL = new VirtualJoystick({
+          container : document.getElementById('stick1'),
+          strokeStyle : 'cyan',
+          mouseSupport  : true,
+          limitStickTravel: true,
+  //      stationaryBase:true,
+  //      baseX   : 200,
+  //      baseY   : 200,
+          stickRadius : 200
+        });
+      };
           
       // RIGHT Stick
-      var joystickR = new VirtualJoystick({
-        container : document.getElementById('stick2'),
-        strokeStyle : 'orange',
-        mouseSupport  : true,
-        limitStickTravel: true,
-        stickRadius : 200
-      });
+      if (cameraman == true) {
+        var joystickR = new VirtualJoystick({
+          container : document.getElementById('stick2'),
+          strokeStyle : 'orange',
+          mouseSupport  : true,
+          limitStickTravel: true,
+          stickRadius : 200
+        });
+      };
  
       //Accelerometer initialisation
       gyro.frequency = 100;
       gyro.startTracking(function(o) {
         // o.Y varie de -5 à 5 lors de l'inclinaison de l'iphone (avant basculement de l'écran), on multiplie par 40 pour arriver à 200
-        if (joystickL.deltaY()==0){
-          valY= 0;
-        }else{
           valY= (o.y)* - 40;
-        }  
+          valX= (o.x)* - 40; 
       });
 
       // INTERVAL EVENT
       setInterval(function(){
-        // If previous value is 0,0
-        if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
+
+        slider= document.getElementById("mySlider").value * -1;
+        if (slider!=0 && previousSldIsZero !=true){
+
+          socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: slider, control_md: control_mode });
+          previousSldIsZero=false;
 
         }else{
-          // Accelerometer mode ?
-          if(acc==true){
-            socket.emit('coordinate',{DXL: valY, DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
-          }else{
-            socket.emit('coordinate',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), DXR: joystickR.deltaX(),DYR: joystickR.deltaY() });
-          }
-          if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
-            previousIsZero=true;
-          }else {
-            previousIsZero=false; 
-          }
+          previousSldIsZero=true;
+
+          //Left Stick coordinates
+          if (driver == true) {
+            // If previous value is 0,0
+            if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
+
+            }else{
+                socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), control_md: control_mode });
+              if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
+                previousIsZero=true;
+              }else {
+                previousIsZero=false; 
+              }
+            }
+          };
+
+          // Right Stick coordinates
+          if (cameraman ==true) {
+            if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
+            }else {
+
+              // Accelerometer mode ?
+              if(acc==true){
+                socket.emit('coordinateCam',{DXR: valX ,DYR: valY});
+              }else{
+                socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
+              }
+            }  
+          };
         }
       }, interval *1000);
+      
+      var button = document.getElementById('hideshow'); // Assumes element with id='button'
+
+      function hideshow() {
+          var slide = document.getElementById('mySlider');
+          if (slide.style.visibility !== 'hidden') {
+              slide.style.visibility = 'hidden';
+              var input = document.getElementById("mySlider");
+              input.value = 0;
+          }
+          else {
+              slide.style.visibility = 'visible';
+          }
+      };
       
     </script> 
 </html>

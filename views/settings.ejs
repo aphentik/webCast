@@ -1,52 +1,10 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="style/style.css">
         <link rel="icon" type="image/png" href="img/cast_favicon.png" />
     </head>
     <body>
-    <style>
-    	#container
-		{
-			margin: 0 auto;
-			width: 900px;
-			background: #fff;
-		}
-
-		#header
-		{
-			background: #ccc;
-			padding: 20px;
-		}
-
-		#header h1 { margin: 0; }
-
-		#content-container
-		{
-			float: left;
-			width: 900px;
-		}
-
-		#content
-		{
-			clear: left;
-			float: left;
-			width: 560px;
-			padding: 20px 0;
-			margin: 0 0 0 30px;
-			display: inline;
-		}
-
-		#content h2 { margin: 0; }
-
-		#footer
-		{
-			clear: both;
-			background: #ccc;
-			text-align: right;
-			padding: 20px;
-			height: 1%;
-		}
-    </style>
 	<div id="container">
 		<div id="header">
 			<h1>
@@ -55,7 +13,8 @@
 		</div>
 		<div id="content-container">
 			<div id="content">
-				<form action="/editsettings" method="POST">
+				<form name="myForm" onsubmit="return validateForm()" action="/editsettings" method="POST">
+					<input type="submit" value="Submit">
 					<fieldset>
 						<legend>Driving Control mode:</legend>
 						<input type="radio" id="tankControl" name="control_mode" value="tank" <% if(control_mode == "tank") {%> checked <% } %> >Tank
@@ -66,10 +25,29 @@
 						<input type="radio" id="joyControl" name="acc_camera_mode" value="true" <% if(acc_mode == "true") {%> checked <% } %> >Accelerometer
 						<input type="radio" id="accControl" name="acc_camera_mode" value="false" <% if(acc_mode == "false") {%> checked <% } %> >Joystick
 					</fieldset>
+					<fieldset>
+						<legend>Profile selection :</legend>
+						<input id='driverh'  type='hidden' value='false' name='userSelectionDriver'>
+						<input type="checkbox" id="driver" name="userSelectionDriver" value="true" <% if(driver == "true") {%> checked <% } %> >Cast Driver
+						<input id='cameramanh'  type='hidden' value='false' name='userSelectionCameraman'>
+						<input type="checkbox" id="cameraman" name="userSelectionCameraman" value="true" <% if(cameraman == "true") {%> checked <% } %> >Cameraman
+					</fieldset>
 					<iframe src="http://192.168.10.1:8080/panel" width="600" height="800"></iframe>
 					<input type="submit" value="Submit">
 				</form> 
 			</div>
+			<script type="text/javascript">
+				function validateForm(){
+
+    				if (document.getElementById('driver').checked) {
+        				document.getElementById('driverh').disabled = true;
+   					};
+   					if (document.getElementById('cameraman').checked) {
+   						document.getElementById('cameramanh').disabled = true;
+   					};
+   					return true;
+				}
+			</script>
 			<div id="footer">
 				Copyright © webCast 2015
 			</div>
