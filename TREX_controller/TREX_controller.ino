@@ -23,7 +23,9 @@
 #include "RunningAverage.h"
 
 // define constants here
-#define startbyte 0x0F                                 // for serial communications each datapacket must start with this byte
+#define startbyte 0x00
+#define startbyte1user 0x0F                                 // for serial communications each datapacket must start with this byte
+#define startbyte2users 0x0E                                 // for serial communications each datapacket must start with this byte
 // delay between commands, ms
 #define SBGC_CMD_DELAY 20
 
@@ -142,8 +144,8 @@ void setup()
       delay(3000);
       c.mode = SBGC_CONTROL_MODE_ANGLE;
   
-   averageVolts.clear(); // explicitly start clean
-   lastAverage = 0;
+   //averageVolts.clear(); // explicitly start clean
+   //lastAverage = 0;
    batteryAvailable = true;
 }
 
@@ -152,23 +154,8 @@ void setup()
 void loop()
 {
   //----------------------------------------------------- Diagnostic mode --------------------------------------------------------------
-  //Serial.println("coucou");
-  //rmspeed =180;
-  //lmspeed =-180;
-  //Motors();
-  //runForward();
-  //Serial.println("kolo");
-  //MotorBeep(1);
-  //return;
-  //int printo = 3;
-  //Serial.println(mode);
-    //Serial.println("loop");
-   //Serial.println(mode);
-   //int roro=0;
-   //mode = 200;
-   //int j = mode;
-   //Serial.println(j);
-  // DiagnosticMode();
+
+    //Sutdown the robot if I2C connection is lost after 1 second 
    if(millis()-lastI2C>1000)
    {
      Shutdown();
@@ -226,7 +213,8 @@ void loop()
     }
     else 
     {
-      lmcur=(analogRead(lmcurpin)-511)*48.83;          // read  left motor current sensor and convert reading to mA
+       volts=analogRead(voltspin)*10/3.357;
+     /* lmcur=(analogRead(lmcurpin)-511)*48.83;          // read  left motor current sensor and convert reading to mA
       rmcur=(analogRead(rmcurpin)-511)*48.83;          // read right motor current sensor and convert reading to mA
       volts=analogRead(voltspin)*10/3.357;             // read battery level and convert to volts with 2 decimal places (eg. 1007 = 10.07 V)
       if(millis()-lastAverage>1000)
@@ -245,7 +233,7 @@ void loop()
         {
           batteryAvailable = true;
         }
-      }
+      }*/
        
     }
   }
