@@ -62,13 +62,13 @@ app.use(session({secret: 'castweb'}))
 app.get('/', function(req, res) {
     //res.writeHead(200, {'Content-Type': 'text/html'});
 
-    TRex.readByte(function(err, res) {
-        //result contains a buffer of bytes
-        if(err){
-            console.log("i2c Read battery Error: "+ err);
-        };   
-        battery=res/10;  
-    }); 
+    // TRex.readByte(function(err, res) {
+    //     //result contains a buffer of bytes
+    //     if(err){
+    //         console.log("i2c Read battery Error: "+ err);
+    //     };   
+    //     battery=res/10;  
+    // }); 
     
     res.render('index.ejs',{ 
     control_mode: req.session.control_md,

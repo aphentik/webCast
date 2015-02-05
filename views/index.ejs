@@ -10,32 +10,11 @@
           <a href="/settings"><img src="img/tools.png"></a>
         </div>
         <div id="slider">
-          <button id="hideshow" onclick="hideshow()"><img src="img/slider.svg"></button><input id ="mySlider" type="range" value="0" max="200" min="0" step="10" >
+          <button id="hideshow" onclick="hideshow()"><img src="img/slider.svg"></button>
+          <input id ="mySlider" type="range" value="0" max="200" min="0" step="10" >
         </div>
         <div id="battery">
-          <img <% 
-                  if(battery >=7.9) {
-                %> 
-                  src="img/battery_4_4.svg" 
-               <%
-                  } else if(battery >= 7.3 && battery < 7.9) {
-                %>
-                  src="img/battery_3_4.svg"
-                <%
-                  } else if(battery >= 6.6 && battery < 7.3) {
-                %>
-                  src="img/battery_2_4.svg"
-                <%
-                  } else if(battery >= 6.5 && battery < 6.6) {
-                %>
-                  src="img/battery_1_4.svg"
-                <%
-                  } else if(battery < 6.5) {%>
-                  src="img/battery_0_4.svg"
-                <%
-                  }
-                %>
-          >
+          <img src="img/battery_3_4.svg">
         </div>
         <span id="example"></span>
         <img id="videofeed" src="http://192.168.10.1:8080/stream/video.mjpeg" alt="If you see this message check the availability of video stream">
@@ -53,12 +32,13 @@
       var interval = 1/10;
       var valY=0;
       var valX=0;
-      var previousIsZero = true;
+      var previousLeftIsZero = true;
+      var previousRightIsZero= true;
       var control_mode = '<%= control_mode %>';
       var acc = <%= acc_mode %>;
       var driver= <%= driver %>;
       var cameraman= <%= cameraman %>;
-      console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
+      //console.log("Touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
       var socket = io.connect('http://192.168.10.1:3000');
       var slide = document.getElementById('mySlider');
       slide.style.visibility = 'hidden';
@@ -117,21 +97,21 @@
           //Left Stick coordinates
           if (driver == true) {
             // If previous value is 0,0
-            if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousIsZero==true){
+            if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0) && previousLeftIsZero==true){
 
             }else{
                 socket.emit('coordinateRob',{DXL: joystickL.deltaX(),DYL: joystickL.deltaY(), control_md: control_mode });
               if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
-                previousIsZero=true;
+                previousLeftIsZero=true;
               }else {
-                previousIsZero=false; 
+                previousLeftIsZero=false; 
               }
             }
           };
 
           // Right Stick coordinates
           if (cameraman ==true) {
-            if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
+            if (joystickR.deltaX() == 0 && joystickR.deltaY() == 0 && previousRightIsZero==true){
             }else {
 
               // Accelerometer mode ?
@@ -140,12 +120,18 @@
               }else{
                 socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
               }
+
+              if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
+                previousRightIsZero=true;
+              }else {
+                previousRightIsZero=false; 
+              }
             }  
           };
         }
       }, interval *1000);
       
-      var button = document.getElementById('hideshow'); // Assumes element with id='button'
+      var button = document.getElementById('hideshow'); 
 
       function hideshow() {
           if (slide.style.visibility !== 'hidden') {
@@ -158,5 +144,31 @@
           }
       };
       
+
+      // Battery code 
+
+          //      <img <% 
+          //         if(battery >=7.9) {
+          //       %> 
+          //         src="img/battery_4_4.svg" 
+          //      <%
+          //         } else if(battery >= 7.3 && battery < 7.9) {
+          //       %>
+          //         src="img/battery_3_4.svg"
+          //       <%
+          //         } else if(battery >= 6.6 && battery < 7.3) {
+          //       %>
+          //         src="img/battery_2_4.svg"
+          //       <%
+          //         } else if(battery >= 6.5 && battery < 6.6) {
+          //       %>
+          //         src="img/battery_1_4.svg"
+          //       <%
+          //         } else if(battery < 6.5) {%>
+          //         src="img/battery_0_4.svg"
+          //       <%
+          //         }
+          //       %>
+          // >
     </script> 
 </html>
