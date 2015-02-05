@@ -121,7 +121,7 @@
                 socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
               }
 
-              if ((joystickL.deltaX() == 0) && (joystickL.deltaY() == 0)){
+              if ((joystickR.deltaX() == 0) && (joystickR.deltaY() == 0)){
                 previousRightIsZero=true;
               }else {
                 previousRightIsZero=false; 
