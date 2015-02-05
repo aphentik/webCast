@@ -113,10 +113,10 @@
           if (cameraman ==true) {
             if (joystickR.deltaX() == 0 && joystickR.deltaY() == 0 && previousRightIsZero==true){
             }else {
-
+              console.log("acc X : "+ valX + "acc Y : " + valY);
               // Accelerometer mode ?
               if(acc==true){
-                socket.emit('coordinateCam',{DXR: valX ,DYR: valY});
+                socket.emit('coordinateCam',{DXR: valX, DYR: valY});
               }else{
                 socket.emit('coordinateCam',{DXR: joystickR.deltaX(),DYR: joystickR.deltaY()});
               }
