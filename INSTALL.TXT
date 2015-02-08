@@ -1,0 +1,22 @@
+Cast
+===================
+
+Matériel requis :
+-Raspberry Pi 
+-RaspiCam
+-Un dongle wifi
+-Une carte contrôle de puissance T'Rex
+-Un Chassis de type wild Thumper
+-Une gimbal 3 axes
+-Une BaseCam
+
+===================
+
+Branchement à réaliser:
+1) Connecter le dongle sur un port USB de la raspberry.
+2) Mettre la nappe de la caméra dans le connecteur de la raspberry.
+3) Relier les moteurs du wild Thumper sur la T'Rex
+4) Réaliser les branchements nécessaires pour faire fonctionner la gimbal
+5) A l'aide de connecteur relier les 4 pins d'i2C de la raspberry à ceux de la T'Rex
+6) Brancher l'UART de la T'Rex sur l'UART de la BaseCam
+

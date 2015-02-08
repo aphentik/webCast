@@ -48,7 +48,7 @@ void DiagnosticMode()
   Serial.print("X: "); Serial.print(analogRead(axiszpin));Serial.print("\t");
   Serial.print("Y: "); Serial.print(analogRead(axisypin));Serial.print("\t");
   Serial.print("Z: "); Serial.print(analogRead(axisxpin));Serial.print("\t");
-  
+  //Accelerometer();
   lmcur=(analogRead(lmcurpin)-511)*48.83;
   rmcur=(analogRead(rmcurpin)-511)*48.83;
   Serial.print("Lmotor current: ");Serial.print(lmcur);Serial.print("mA\t");

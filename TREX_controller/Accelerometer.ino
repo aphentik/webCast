@@ -18,7 +18,9 @@ void Accelerometer()
   delty=yaxis-oldy;
   deltz=zaxis-oldz;
   magnitude=sqrt(sq(deltx)+sq(delty)+sq(deltz));              // magnitude of delta x,y,z using Pythagorus's Theorum
-  
+ /* Serial.print("Magnitude: ");
+  Serial.print(magnitude);
+  Serial.print("\t");*/
   if (magnitude>sensitivity)                                  // has a new impact occured
   {
     vibration=devibrate;                   // reset anti-vibration counter

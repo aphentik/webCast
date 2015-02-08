@@ -2,15 +2,15 @@
 void I2Cstatus()
 {
 
-  byte datapack[2];                             // array to store data packet in prior to transmission
-  datapack[0]=0x08;//startbyte;                    // each packet starts with startbyte
+  byte datapack[1];                             // array to store data packet in prior to transmission
+  //datapack[0]=0x08;//startbyte;                    // each packet starts with startbyte
   //datapack[1]=errorflag;                         // nonzero if bad data received - Master must wait until buffer has been flushed and send again
   
-  datapack[1]=highByte(volts);                   // battery voltage      high byte
+  datapack[0]=(int)volts/10;                   // battery voltage      high byte
   //datapack[2]= lowByte(volts);                   // battery voltage      low  byte
-  Wire.write(datapack,2);                       // transmit data packet of 24 bytes
+  Wire.write(datapack,1);                       // transmit data packet of 24 bytes
   
-  Serial.println(volts);
+  //Serial.println(datapack[0]);
   /*datapack[4]=highByte(lmcur);                   // left  motor current  high byte
   datapack[5]= lowByte(lmcur);                   // left  motor current  low  byte
   

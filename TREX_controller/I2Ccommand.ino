@@ -2,7 +2,7 @@
 //------------------------------------------------------------------------------- Receive commands from I²C Master -----------------------------------------------
 void I2Ccommand(int recvflag)     
 {
-
+  byte command=0;
   byte boolForwardLeft;
   byte boolForwardRight;
   byte angleConfiguration;
@@ -17,21 +17,30 @@ void I2Ccommand(int recvflag)
   {
   
     b=Wire.read();    // read a byte from the buffer
-
-    //Changer flag to size of packet
-    if(b!=startbyte) errorflag = errorflag | 1;                 // if byte does not equal startbyte or Master request incorrect number of bytes then generate error
-    if(recvflag!=6) errorflag = errorflag | 64;
+    
+    if(recvflag == 6 && b==startbyte1user)
+    {
+     command = command | 1;
+    }
+    else if (recvflag == 4 && b==startbyte2users)
+    {
+     command = command | 2;
+    }
+    else if (errorflag == 0)
+    {
+      errorflag = errorflag | 1;
+    }
 
   } while (errorflag>0 && Wire.available()>0);                                 // if errorflag>0 then empty buffer of corrupt data
   
-  if(errorflag==1)                                                              // corrupt data received 
+  /*if(errorflag==1)                                                              // corrupt data received 
   {
     Serial.println("I2CcommandError");
     Serial.println(recvflag);
     Shutdown();                                                                // shut down motors and servos
     return;                                                                    // wait for valid data packet
-  } 
-  if(errorflag > 1)
+  } */
+  if(errorflag > 0)
   {
     Serial.println(errorflag);
     return;
@@ -40,6 +49,10 @@ void I2Ccommand(int recvflag)
   
   //Serial.println("I2CcommandSuite");
   //----------------------------------------------------------------------------- valid data packet received ------------------------------
+  
+  if(command == 1)
+  {
+   //-----------------------------------------------------------------------------left motor speed-----------------------------------------
   b=Wire.read();                                                               // read left motor speed (positive value) from the buffer
   if(b>=0 && b<256)                                                               // if value is valid  
   {
@@ -61,7 +74,7 @@ void I2Ccommand(int recvflag)
     errorflag = errorflag | 2;                                                 // incorrect value given
   }
   
-  
+    //-----------------------------------------------------------------------------left motor speed-----------------------------------------
    b=Wire.read();                                                               // read left motor speed (negative value) from the buffer
   if(b>=0 && b<256)                                                               // if value is valid
   {
@@ -88,7 +101,7 @@ void I2Ccommand(int recvflag)
   }
   
   
-  
+  //-----------------------------------------------------------------------------right motor speed-----------------------------------------
   
   b=Wire.read();                                                               // read right motor speed (positive value) from the buffer
   if(b>=0 && b<256)                                                               // if value is valid  
@@ -112,7 +125,7 @@ void I2Ccommand(int recvflag)
     errorflag = errorflag | 8;                                                 // incorrect value given
   }
   
-  
+  //-----------------------------------------------------------------------------right motor speed-----------------------------------------
    b=Wire.read();                                                               // read right motor speed (negative value)from the buffer
   if(b>=0 && b<256)                                                               // if value is valid  
   {
@@ -138,7 +151,7 @@ void I2Ccommand(int recvflag)
   {
     errorflag = errorflag | 16;                                                 // incorrect value given
   }
-  
+  //-----------------------------------------------------------------------------brake-----------------------------------------
  b=Wire.read();                                                               // read brake value from the buffer
   if(b==0 || b==1)                                                               // if value is valid 
   {
@@ -159,7 +172,16 @@ void I2Ccommand(int recvflag)
     errorflag = errorflag | 32;                                                 // incorrect value given
   }
   
-   b=Wire.read();                                                               // read joystick Camera mode from the buffer
+
+  mode=0;                                                                      // breaks out of Shutdown mode when I²C command is given
+  Motors();                                                                    // update brake, speed and direction of motors
+  }
+  
+  
+  if(command == 2)
+  {
+    //-----------------------------------------------------------------------------joystick camera mode-----------------------------------------
+    b=Wire.read();                                                               // read joystick Camera mode from the buffer
   if(b>=0 && b<5)                                                               // if value is valid
   {
     angleConfiguration = b; 
@@ -168,7 +190,7 @@ void I2Ccommand(int recvflag)
   {
     errorflag = errorflag | 64;                                                 // incorrect pwmfreq given
   }
-
+  //-----------------------------------------------------------------------------Pitch speed-----------------------------------------
   b=Wire.read();                                                               // read Pitch speed from the buffer
   if(b>=0 && b<256)                                                               // if value is valid
   {
@@ -178,7 +200,7 @@ void I2Ccommand(int recvflag)
   {
     errorflag = errorflag | 128;                                                 // incorrect pwmfreq given
   }
-  
+  //-----------------------------------------------------------------------------Yaw speed-----------------------------------------
    b=Wire.read();                                                               // read Yaw speed from the buffer
   if(b>=0 && b<256)                                                               // if value is valid
   {
@@ -189,45 +211,35 @@ void I2Ccommand(int recvflag)
     errorflag = errorflag | 256;                                                 // incorrect pwmfreq given
   }
   
+  c.speedPITCH = speedPitch * SBGC_SPEED_SCALE;   
+  c.speedYAW = speedYaw * SBGC_SPEED_SCALE;
+  
   if(angleConfiguration==1)
   {
-  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(-20);
-  c.speedPITCH = speedPitch * SBGC_SPEED_SCALE;
+  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(-90);
   c.angleYAW = SBGC_DEGREE_TO_ANGLE(-360);
-  c.speedYAW = speedYaw * SBGC_SPEED_SCALE;
-  SBGC_sendCommand(SBGC_CMD_CONTROL, &c, sizeof(c));
   }
   
    if(angleConfiguration==2)
   {
-  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(-20);
-  c.speedPITCH = speedPitch * SBGC_SPEED_SCALE;
+  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(-90);
   c.angleYAW = SBGC_DEGREE_TO_ANGLE(360);
-  c.speedYAW = speedYaw * SBGC_SPEED_SCALE;
-  SBGC_sendCommand(SBGC_CMD_CONTROL, &c, sizeof(c));
   }
   
    if(angleConfiguration==3)
   {
-  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(90);
-  c.speedPITCH = speedPitch * SBGC_SPEED_SCALE;
+  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(20);
   c.angleYAW = SBGC_DEGREE_TO_ANGLE(-360);
-  c.speedYAW = speedYaw * SBGC_SPEED_SCALE;
-  SBGC_sendCommand(SBGC_CMD_CONTROL, &c, sizeof(c));
   }
   
    if(angleConfiguration==4)
   {
-  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(90);
-  c.speedPITCH = speedPitch * SBGC_SPEED_SCALE;
+  c.anglePITCH = SBGC_DEGREE_TO_ANGLE(20);
   c.angleYAW = SBGC_DEGREE_TO_ANGLE(360);
-  c.speedYAW = speedYaw * SBGC_SPEED_SCALE;
-  SBGC_sendCommand(SBGC_CMD_CONTROL, &c, sizeof(c));
   }
-
-  mode=0;                                                                      // breaks out of Shutdown mode when I²C command is given
-  Motors();                                                                    // update brake, speed and direction of motors
-                                                              
+    SBGC_sendCommand(SBGC_CMD_CONTROL, &c, sizeof(c));
+    mode=0;
+  }  
 }
 
 
