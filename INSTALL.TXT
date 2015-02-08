@@ -20,3 +20,49 @@ Branchement à réaliser:
 5) A l'aide de connecteur relier les 4 pins d'i2C de la raspberry à ceux de la T'Rex
 6) Brancher l'UART de la T'Rex sur l'UART de la BaseCam
 
+===================
+
+I - Raspberry Pi
+A] La carte SD doit être au moins de 8Go
+1) Format the SD card using the platform-specific instructions below:
+   a. Windows
+      i. Download the SD Association's Formatting Tool from https://www.sdcard.org/downloads/formatter_4/eula_windows/
+      ii. Install and run the Formatting Tool on your machine
+      iii. Set "FORMAT SIZE ADJUSTMENT" option to "ON" in the "Options" menu
+      iv. Check that the SD card you inserted matches the one selected by the Tool
+      v. Click the "Format" button
+   b. Mac
+      i. Download the SD Association's Formatting Tool from https://www.sdcard.org/downloads/formatter_4/eula_mac/
+      ii. Install and run the Formatting Tool on your machine
+      iii. Select "Overwrite Format"
+      iv. Check that the SD card you inserted matches the one selected by the Tool
+      v. Click the "Format" button
+   c. Linux
+      i. We recommend using gparted (or the command line version parted)
+      ii. Format the entire disk as FAT
+2) Récuperer l'image de la raspberry pour CAST
+3) Copier l'image sur la carte SD dans un terminal (sudo dd bs=1m if=Desktop/imageCAST.dmg of=/dev/disk1)
+4) Une fois l'image copier sur la carte, lancé votre raspberry Pi et ouvrer une terminal et déplacez vous dans le dossier webCast pour y écrire la commande suivante "git pull master"
+5) Redémarrez votre raspberry Pi et elle est prête à l'utilisation. Le réseau wifi s'appelle Clara et son mot de passe est "castCAST"
+
+B] Si pour une raison ou une autre vous n'arrivez pas à récuperer l'image de CAST, vous avez besoin d'installer sur votre rapsberry Pi :
+-hostapd
+-isc-dhcp-server
+Voici un tutoriel pour installer correctement hostapd et isc-dhcp-server (http://raspberrypihq.com/how-to-turn-a-raspberry-pi-into-a-wifi-router/)
+-uv4l (http://www.linux-projects.org/modules/sections/index.php?op=viewarticle&artid=14)
+-Créer un dossier webCast et faire un git pull master de la source suivante https://github.com/aphentik/webCast
+Vous devez aussi activer dans les paramètres de votre raspberry l'accès à la raspicam.
+Enfin vous devez autorisez l'utilisation des GPIO responsable de l'i2c pour cela suivez le tutoriel suivant https://www.npmjs.com/package/i2c
+
+
+II - La T'Rex
+1) Récupérez sur votre ordinateur depuis git (https://github.com/aphentik/webCast) le dossier TREX_controller
+2) Ouvrez avec le logiciel Arduino (disponible à partir de ce lien http://arduino.cc/en/Main/Software) le fichier "TREX_controller.ino"
+3) Branchez vous en USB à la T'Rex et envoyez le code sur celle ci
+
+=====================
+
+Votre CAST est prêt pour l'emploi ! Amusez vous bien
+
+L'équipe CAST
+
