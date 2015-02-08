@@ -57,7 +57,7 @@ Enfin vous devez autorisez l'utilisation des GPIO responsable de l'i2c pour cela
 
 II - La T'Rex
 1) Récupérez sur votre ordinateur depuis git (https://github.com/aphentik/webCast) le dossier TREX_controller
-2) Ouvrez avec le logiciel Arduino (disponible à partir de ce lien http://arduino.cc/en/Main/Software) le fichier "TREX_controller.ino"
+2) Ouvrez le fichier "TREX_controller.ino" avec le logiciel Arduino (disponible à partir de ce lien http://arduino.cc/en/Main/Software) 
 3) Branchez vous en USB à la T'Rex et envoyez le code sur celle ci
 
 =====================
