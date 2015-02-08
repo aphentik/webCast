@@ -134,10 +134,7 @@ void setup()
     Wire.onReceive(I2Ccommand);                        // specify ISR for data received
    
   }
-  if(mode==2)
-  {
-    TTLConfig();
-  }
+
   
       SBGC_Demo_setup();
       // Take a pause to let gimbal controller to initialize
@@ -177,7 +174,7 @@ void loop()
   //----------------------------------------------------- Bluetooth mode ----------------------------------------------------------------
   if(mode==2)
   {
-    TTL();
+
     //Bluetooth();                                       // control using Android phone and sample app
     return;
   }
@@ -214,26 +211,6 @@ void loop()
     else 
     {
        volts=analogRead(voltspin)*10/3.357;
-     /* lmcur=(analogRead(lmcurpin)-511)*48.83;          // read  left motor current sensor and convert reading to mA
-      rmcur=(analogRead(rmcurpin)-511)*48.83;          // read right motor current sensor and convert reading to mA
-      volts=analogRead(voltspin)*10/3.357;             // read battery level and convert to volts with 2 decimal places (eg. 1007 = 10.07 V)
-      if(millis()-lastAverage>1000)
-      {
-        lastAverage = millis();
-        averageVolts.addValue(volts);
-        //Serial.println(averageVolts.getAverage());
-        if(averageVolts.getAverage()<lowbat && batteryAvailable==true)
-        {
-          Serial.println("No more battery");        // change to shutdown mode if battery voltage too low
-          MotorBeep(5);
-          batteryAvailable = false;
-          averageVolts.clear();
-        }
-        else if (averageVolts.getAverage()>=lowbat)
-        {
-          batteryAvailable = true;
-        }
-      }*/
        
     }
   }
